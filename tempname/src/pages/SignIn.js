@@ -97,6 +97,7 @@ const styles = {
     borderRadius: '5px',
     border: '1px solid #ccc',
     fontSize: '16px',
+    color: '#333',
   },
   button: {
     padding: '0.75rem 1.5rem',
