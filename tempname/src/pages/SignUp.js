@@ -28,14 +28,14 @@ function SignUp() {
         .eq('email', email)
         .limit(1)
 
-      if (checkError) {
-        console.log(checkError)
-      }
+    if (checkError) {
+      console.log(checkError)
+    }
 
-      if (check && check.length > 0) {
-        alert('This email already exists, please sign in instead')
-        return;
-      }
+    if (check && check.length > 0) {
+      alert('This email already exists, please sign in instead');
+      return;
+    }
 
     const code = Math.floor(100000 + Math.random() * 900000).toString(); // Generate a random 6-digit code
     setGeneratedCode(code);
@@ -167,6 +167,7 @@ function SignUp() {
 
 const styles = {
   container: {
+    marginTop: '5rem', // Space below the navbar
     maxWidth: '400px',
     margin: '0 auto',
     padding: '2rem',
@@ -195,6 +196,7 @@ const styles = {
     border: '1px solid #ccc',
     fontSize: '16px',
     boxSizing: 'border-box',
+    color: '#333', // Set the text color to dark gray (or use 'black' for black text)
   },
   button: {
     padding: '0.75rem 1.5rem',

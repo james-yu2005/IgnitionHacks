@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import React from 'react';
 
 const Profile = () => {
   const [firstname, setFirstName] = useState('');
@@ -15,13 +15,8 @@ const Profile = () => {
             onChange={(e) => setFirstName(e)}
           />
         </div>
-          <p>Last name: </p>
-          <input
-            placeholder='last-name'
-            value={lastname}
-            onChange={(e) => setLastName(e)}
-          />
         <div>
+
         </div>
       </div>
       

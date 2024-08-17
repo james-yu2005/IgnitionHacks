@@ -1,3 +1,62 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* index.css */
+
+/* Define global CSS variables for colors */
+:root {
+    --primary-color: #447e7b; /* Darker turquoise */
+    --secondary-color: #78b7b3; /* Lighter turquoise */
+    --background-color: rgba(68, 126, 123, 0.5); /* Transparent background */
+    --text-color: white;
+  }
+  
+  /* Apply the global background and color styles */
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Akaya Telivigala', cursive;
+    background-color: var(--background-color);
+    background-attachment: fixed; /* Make background static (not scroll) */
+    background-size: cover; /* Cover entire viewport */
+    color: var(--text-color); /* Apply global text color */
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden; /* Prevent horizontal overflow */
+  }
+  
+  #root {
+    min-height: 100vh; /* Ensure content spans full height of the viewport */
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* index.css */
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Akaya Telivigala', cursive;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  overflow-x: hidden; /* Prevent horizontal overflow */
+}
+
+/* Ensure the main content starts below the navbar */
+main {
+  margin-top: 5rem; /* Adjust this value based on the navbar height */
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* Navbar should always be fixed at the top */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+/* Other global styles can go here */

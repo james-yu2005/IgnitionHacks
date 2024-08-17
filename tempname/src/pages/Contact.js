@@ -19,7 +19,6 @@ const Contact = () => {
 
 const styles = {
   container: {
-    backgroundColor: '#78b7b3', // Turquoise
     color: 'white',
     textAlign: 'center',
     padding: '100px 20px',
