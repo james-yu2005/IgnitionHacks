@@ -16,7 +16,7 @@
   body, html {
     margin: 0;
     padding: 0;
-    font-family: 'Akaya Telivigala', cursive;
+    font-family: 'Montserrat';
     background-color: var(--background-color);
     background-attachment: fixed; /* Make background static (not scroll) */
     background-size: cover; /* Cover entire viewport */
@@ -37,7 +37,7 @@
 body, html {
   margin: 0;
   padding: 0;
-  font-family: 'Akaya Telivigala', cursive;
+  font-family: 'Montserrat';
   background-color: var(--background-color);
   color: var(--text-color);
   overflow-x: hidden; /* Prevent horizontal overflow */
