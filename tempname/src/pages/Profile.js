@@ -17,17 +17,14 @@ const Profile = () => {
   const [hours, setHours] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [skill, setSkill] = useState('');
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [uploadProgress, setUploadProgress] = useState({});
-
+  const [selectedFiles, setSelectedFiles] = useState(null);
 
   const location = useLocation();
-  const userId = location.state?.user_id;  // Correct key reference
+  const userId = location.state?.user_id; 
 
   useEffect(() => {
     const getUserInfo = async () => {
       const userInfo = await getInfo(userId)
-      console.log(userInfo)
       setFirstName(userInfo.name)
       setLastName(userInfo.lastname)
       setAge(userInfo.age)
@@ -75,9 +72,7 @@ const Profile = () => {
         alert('Please enter valid numbers for age and hours.');
         return;
       }
-      
-      console.log(skill)
-    
+          
       const payload = {
         user_id: userId,
         name: firstname,
@@ -91,7 +86,6 @@ const Profile = () => {
         hours: parsedHours,
         skills: skill,
       };
-      console.log(available)
       if (!available) {
         await updateInfo(payload, userId)
         setIsEditing(false);
@@ -107,45 +101,37 @@ const Profile = () => {
   };
 
   const handleFileChange = (e) => {
-    setSelectedFiles([...e.target.files]);
+    const file = e.target.files[0]; 
+    if (file) {
+      setSelectedFiles(file);
+    }
   };
 
   const handleFileUpload = async () => {
+    if (selectedFiles === null) {
+      alert('Please select file to upload or select a new file')
+      return;
+    }
     if (selectedFiles.length === 0) {
-        alert('Please select files to upload.');
+        alert('Please select file to upload.');
         return;
     }
+    
+    const file = selectedFiles;
+    const fileName = `${file.name}_${new Date().toISOString()}`; 
+    const folderPath = `user_id-${userId}/${fileName}`; 
 
-    const newProgress = {};
-    if (selectedFiles.length > 3) {
-        alert('Please upload max 3 files!')
-        return;
+    const { data, error } = await supabase
+      .storage
+      .from('skill_proof')
+      .upload(folderPath, selectedFiles);
+
+    setSelectedFiles(null);
+    if (error) {
+      console.error(`Error uploading file`, error);
+    } else {
+      alert(`File uploaded successfully: ${fileName}`, data);
     }
-    for (let i = 0; i < selectedFiles.length; i++) {
-        const file = selectedFiles[i];
-        const fileName = `${Date.now()}_${file.name}`;
-
-        const { data, error } = await supabase
-        .storage
-        .from('skill_proof') // Replace with your Supabase bucket name
-        .upload(fileName, file, {
-            onUploadProgress: (progressEvent) => {
-            const percentCompleted = Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total
-            );
-            newProgress[file.name] = percentCompleted;
-            setUploadProgress({ ...newProgress });
-            },
-        });
-
-        if (error) {
-        console.error(`Error uploading file ${file.name}:`, error.message);
-        alert(`Error uploading file ${file.name}`);
-        } else {
-        console.log(`File uploaded successfully: ${fileName}`, data);
-        }
-    }
-   
   };
 
   return (
@@ -266,25 +252,12 @@ const Profile = () => {
             style={isEditing ? styles.inputEditable : styles.input}
           />
         </div>
-        <div style={styles.column}>
-          <label style={styles.label}>Supporting documents of your skill (max 3)</label>
-          <input className='text-black' type="file" onChange={handleFileChange} multiple/>
-          <button onClick={handleFileUpload}>Upload</button>
-          {selectedFiles.length > 0 && (
-            <ul>
-              {selectedFiles.map((file, index) => (
-                <li key={index}>{file.name}</li>
-              ))}
-            </ul>
-          )}
-          {Object.keys(uploadProgress).length > 0 && (
-            <div>
-              {Object.keys(uploadProgress).map((fileName, index) => (
-                <p key={index}>{fileName}: {uploadProgress[fileName]}%</p>
-              ))}
-            </div>
-          )}        
+        <div style={styles.column} className='text-black'>
+          <label style={styles.label}>Supporting documents of your skill (upload one at a time - max 3)</label>
+          <input className='text-black' type="file" onChange={handleFileChange}/>     
+          <button onClick={handleFileUpload} className='border-2 bg-gray-400 border-gray-700 rounded-md'>Upload to profile</button>
           </div>
+          
       </div>
       <div style={styles.buttonRow}>
         <button onClick={handleEditClick} style={styles.button}>Edit</button>
