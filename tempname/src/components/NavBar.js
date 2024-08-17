@@ -6,7 +6,7 @@ const NavBar = ({ isAuthenticated, handleLogout }) => {
     <nav style={styles.nav}>
       <div style={styles.leftSection}>
         <Link to="/" style={styles.logoLink}>
-          <img src="/path-to-your-logo.png" alt="Logo" style={styles.logo} />
+          <img src="https://cdn.discordapp.com/attachments/1274199397097406565/1274356356740288512/Screenshot_2024-08-17_at_9.17.08_AM.png?ex=66c1f457&is=66c0a2d7&hm=62344c2519ede2db6b0c25d9aefde737a263f056ce7afb8d653c4ba698d31fa8&" alt="Logo" style={styles.logo} />
         </Link>
         <Link to="/about" style={styles.link}>About</Link>
         <Link to="/services" style={styles.link}>Services</Link>
@@ -33,17 +33,18 @@ const NavBar = ({ isAuthenticated, handleLogout }) => {
 
 const styles = {
   nav: {
-    position: 'absolute', // Allows the navbar to overlap content
-    top: 0, // Positions the navbar at the top of the page
+    position: 'fixed', // Ensures the navbar stays fixed at the top
+    top: 0, // Positions the navbar at the top of the viewport
     left: 0, // Aligns the navbar to the left edge
     width: '100%', // Ensures the navbar spans the entire width of the screen
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '1rem',
-    backgroundColor: 'rgba(68, 126, 123, 0.50)', // Turquoise with 50% opacity
+    backgroundColor: '#447e7b', // Darker turquoise without opacity
     color: 'white',
     zIndex: 1000, // Ensures the navbar stays on top of other content
+    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)', // Adds a slight shadow for better separation from content
   },
   leftSection: {
     display: 'flex',
