@@ -1,6 +1,9 @@
-import { React, useState } from 'react';
+import React, { useState, } from 'react';
 import { supabase } from '../supabase/supabase';
 import { useLocation } from 'react-router-dom';
+import { EmbedSkill } from '../components/EmbedSkill';
+import  { insertInfo } from '../supabase/insertInfo';
+import { updateInfo } from '../supabase/updateInfo';
 
 const Profile = () => {
   const [firstname, setFirstName] = useState('');
@@ -8,139 +11,356 @@ const Profile = () => {
   const [number, setNumber] = useState('');
   const [code, setCode] = useState('');
   const [city, setCity] = useState('');
-  const [age, setAge] = useState(0);
+  const [age, setAge] = useState('');
   const [education, setEducation] = useState('');
   const [connect, setConnect] = useState('');
-  const [hours, setHours] = useState(0);
+  const [hours, setHours] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [skill, setSkill] = useState('');
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState({});
+
 
   const location = useLocation();
-  const userId = location.state?.user_id; 
-  
+  const userId = location.state?.user_id;  // Correct key reference
   console.log(userId)
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const checkAvailable = async () => {
+  
+    const { data, error } = await supabase
+      .from('info')
+      .select('*')
+      .eq('user_id', userId)
+      .limit(1)
+    
+    if (error) {
+      console.log(error)
+    }
+
+    if (data) {
+      return false;
+    }
+    return true;
+  }
+
+  const handleConfirmClick = async () => {
     try {
-      const { data, error } = await supabase
-        .from('info')
-        .insert([{
-          user_id: userId, 
-          name: firstname,
-          lastname,
-          phone:number,
-          postal:code,
-          city,
-          age,
-          education,
-          connection:connect,
-          hours,
-          created_at: new Date().toISOString()
-        }]);
+      const available = await checkAvailable();
 
-      if (error) throw error;
+      const parsedAge = age ? parseInt(age, 10) : null;
+      const parsedHours = hours ? parseInt(hours, 10) : null;
 
-      if (data) {
-        alert('Profile info saved successfully!');
+      if (isNaN(parsedAge) || isNaN(parsedHours)) {
+        alert('Please enter valid numbers for age and hours.');
+        return;
       }
-      // You can navigate to another page or show a success message
+      
+      const embeddings = await EmbedSkill(skill)
+      console.log(embeddings)
+      const payload = {
+        user_id: userId,
+        name: firstname,
+        lastname,
+        phone: number,
+        postal: code,
+        city,
+        age: parsedAge,
+        education,
+        connection: connect,
+        hours: parsedHours,
+        skills: skill,
+        embed_skills: embeddings
+      };
+      console.log(available)
+      if (!available) {
+        await updateInfo(payload, userId)
+        setIsEditing(false);
+        alert('Profile updated successfully!');
+      } else {
+        await insertInfo(payload)
+        setIsEditing(false);
+        alert('Profile added successfully!');
+      }
     } catch (error) {
-      console.log('Error saving profile info:', error);
+      console.log('Error updating profile info:', error);
     }
   };
 
+  const handleFileChange = (e) => {
+    setSelectedFiles([...e.target.files]);
+  };
+
+const handleFileUpload = async () => {
+    if (selectedFiles.length === 0) {
+        alert('Please select files to upload.');
+        return;
+    }
+
+    const newProgress = {};
+    if (selectedFiles.length > 3) {
+        alert('Please upload max 3 files!')
+        return;
+    }
+    for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        const fileName = `${Date.now()}_${file.name}`;
+
+        const { data, error } = await supabase
+        .storage
+        .from('skill_proof') // Replace with your Supabase bucket name
+        .upload(fileName, file, {
+            onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+            );
+            newProgress[file.name] = percentCompleted;
+            setUploadProgress({ ...newProgress });
+            },
+        });
+
+        if (error) {
+        console.error(`Error uploading file ${file.name}:`, error.message);
+        alert(`Error uploading file ${file.name}`);
+        } else {
+        console.log(`File uploaded successfully: ${fileName}`, data);
+        }
+    }
+   
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Profile</h2>
-      <div className='flex flex-row'>
-        <div className='flex flex-col'>
-          <p>First name: </p>
+    <div style={styles.container}>
+      <h2 style={styles.title}>Profile</h2>
+      <div style={styles.row}>
+        <div style={styles.column}>
+          <label style={styles.label}>First name</label>
           <input
-            placeholder='Ex. John'
+            type="text"
             value={firstname}
             onChange={(e) => setFirstName(e.target.value)}
-            className='text-black'
+            disabled={!isEditing}
+            style={isEditing ? styles.inputEditable : styles.input}
           />
         </div>
-        <div className='flex flex-col'>
-          <p>Last name: </p>
+        <div style={styles.column}>
+          <label style={styles.label}>Last name</label>
           <input
-            placeholder='Ex. Doe'
+            type="text"
             value={lastname}
             onChange={(e) => setLastName(e.target.value)}
-            className='text-black'
+            disabled={!isEditing}
+            style={isEditing ? styles.inputEditable : styles.input}
           />
         </div>
-        <div className='flex flex-col'>
-          <p>Phone number (optional)</p>
+        <div style={styles.column}>
+          <label style={styles.label}>Phone number (optional)</label>
           <input
+            type="text"
             value={number}
             onChange={(e) => setNumber(e.target.value)}
-            className='text-black'
-            placeholder='phone number'
+            disabled={!isEditing}
+            style={isEditing ? styles.inputEditable : styles.input}
           />
         </div>
       </div>
-      <div className='flex flex-row'>
-        
-        <div className='flex flex-col'>
-          <p>City</p>
+      <div style={styles.row}>
+        <div style={styles.column}>
+          <label style={styles.label}>City</label>
           <input
+            type="text"
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            className='text-black'
-            placeholder='Ex. Markham'
+            disabled={!isEditing}
+            style={isEditing ? styles.inputEditable : styles.input}
           />
         </div>
-        <div className='flex flex-col'>
-          <p>Postal Code</p>
+        <div style={styles.column}>
+          <label style={styles.label}>Postal Code</label>
           <input
+            type="text"
             value={code}
             onChange={(e) => setCode(e.target.value)}
-            className='text-black'
-            placeholder='Ex. L9B 3C7'
+            disabled={!isEditing}
+            style={isEditing ? styles.inputEditable : styles.input}
           />
         </div>
-        <div className='flex flex-col'>
-          <p>Age: </p>
+        <div style={styles.column}>
+          <label style={styles.label}>Age</label>
           <input
+            type="number"
             value={age}
             onChange={(e) => setAge(e.target.value)}
-            className='text-black'
-            type='number'
-            placeholder='Ex. 19'
+            disabled={!isEditing}
+            style={isEditing ? styles.inputEditable : styles.input}
           />
         </div>
       </div>
-      <div className='flex flex-row'>
-        <div className='flex flex-col text-black'>
-          <p>Education </p>
-          <select value={education} onChange={(e) => setEducation(e.target.value)}>
-            <option value="High School" className='text-black'>High School</option>
-            <option value="Undergraduate" className='text-black'>Undergraduate</option>
-            <option value="Post-graduate" className='text-black'>Post-graduate</option>
+      <div style={styles.row}>
+        <div style={styles.column}>
+          <label style={styles.label}>Education</label>
+          <select
+            value={education}
+            onChange={(e) => setEducation(e.target.value)}
+            disabled={!isEditing}
+            style={isEditing ? styles.selectEditable : styles.select}
+          >
+            <option value="High School">High School</option>
+            <option value="Undergraduate">Undergraduate</option>
+            <option value="Post-graduate">Post-graduate</option>
           </select>
         </div>
-        <div className='flex flex-col text-black'>
-          <p>How do you want to connect?</p>
-          <select value={connect} onChange={(e) => setConnect(e.target.value)}>
-            <option value="In-person" className='text-black'>In-person</option>
-            <option value="Hybrid" className='text-black'>Hybrid</option>
-            <option value="Online" className='text-black'>Online</option>
+        <div style={styles.column}>
+          <label style={styles.label}>How do you want to connect?</label>
+          <select
+            value={connect}
+            onChange={(e) => setConnect(e.target.value)}
+            disabled={!isEditing}
+            style={isEditing ? styles.selectEditable : styles.select}
+          >
+            <option value="In-person">In-person</option>
+            <option value="Hybrid">Hybrid</option>
+            <option value="Online">Online</option>
           </select>
         </div>
-        <div className='flex flex-col'>
-          <p>How many hours are you willing to commit (per week) ?</p>
+        <div style={styles.column}>
+          <label style={styles.label}>How many weekly hours?</label>
           <input
+            type="number"
             value={hours}
             onChange={(e) => setHours(e.target.value)}
-            placeholder='Ex. 2'
-            type='nunmber'
-            className='text-black'
+            disabled={!isEditing}
+            style={isEditing ? styles.inputEditable : styles.input}
           />
         </div>
       </div>
-      <button type='submit'>submit</button>
-    </form>
-  )
-}
+      <div style={styles.row}>
+        <div style={styles.column}>
+          <label style={styles.label}>What is your skill? Describe it in detail</label>
+          <textarea
+            type="text"
+            value={skill}
+            onChange={(e) => setSkill(e.target.value)}
+            disabled={!isEditing}
+            style={isEditing ? styles.inputEditable : styles.input}
+          />
+        </div>
+        <div style={styles.column}>
+          <label style={styles.label}>Supporting documents of your skill (max 3)</label>
+          <input type="file" onChange={handleFileChange} />
+          <button onClick={handleFileUpload}>Upload</button>
+          {uploadProgress > 0 && <p>Upload Progress: {uploadProgress}%</p>}
+        </div>
+      </div>
+      <div style={styles.buttonRow}>
+        <button onClick={handleEditClick} style={styles.button}>Edit</button>
+        <button onClick={handleConfirmClick} style={styles.button} disabled={!isEditing}>Confirm</button>
+      </div>
+    </div>
+  );
+};
+
+const styles = {
+  container: {
+    marginTop: '5rem',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '2rem',
+    backgroundColor: '#f0f0f0',
+    borderRadius: '10px',
+    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+    maxWidth: '800px',
+    margin: '0 auto',
+  },
+  title: {
+    textAlign: 'center',
+    marginBottom: '1.5rem',
+    fontSize: '2rem',
+    color: '#0056b3',
+  },
+  row: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: '1rem',
+    width: '100%',
+  },
+  column: {
+    flex: '1',
+    marginRight: '1rem',
+    ':last-child': {
+      marginRight: 0,
+    },
+  },
+  label: {
+    marginBottom: '0.5rem',
+    color: '#333',
+    fontWeight: 'bold',
+    fontSize: '1rem',
+  },
+  input: {
+    width: '100%',
+    padding: '0.75rem',
+    marginBottom: '1rem',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+    fontSize: '1rem',
+    backgroundColor: '#e0e0e0',
+    color: '#666',
+    boxSizing: 'border-box',
+  },
+  inputEditable: {
+    width: '100%',
+    padding: '0.75rem',
+    marginBottom: '1rem',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+    fontSize: '1rem',
+    backgroundColor: '#fff',
+    color: '#000',
+    boxSizing: 'border-box',
+  },
+  select: {
+    width: '100%',
+    padding: '0.75rem',
+    marginBottom: '1rem',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+    fontSize: '1rem',
+    backgroundColor: '#e0e0e0',
+    color: '#666',
+    boxSizing: 'border-box',
+  },
+  selectEditable: {
+    width: '100%',
+    padding: '0.75rem',
+    marginBottom: '1rem',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+    fontSize: '1rem',
+    backgroundColor: '#fff',
+    color: '#000',
+    boxSizing: 'border-box',
+  },
+  buttonRow: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '1rem',
+    marginTop: '1rem',
+  },
+  button: {
+    padding: '0.75rem 1.5rem',
+    fontSize: '1rem',
+    backgroundColor: '#0056b3',
+    color: 'white',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease',
+  },
+};
 
 export default Profile;

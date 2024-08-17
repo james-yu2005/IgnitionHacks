@@ -6,7 +6,7 @@ const NavBar = ({ isAuthenticated, handleLogout }) => {
     <nav style={styles.nav}>
       <div style={styles.leftSection}>
         <Link to="/" style={styles.logoLink}>
-          <img src="https://cdn.discordapp.com/attachments/1274199397097406565/1274356356740288512/Screenshot_2024-08-17_at_9.17.08_AM.png?ex=66c1f457&is=66c0a2d7&hm=62344c2519ede2db6b0c25d9aefde737a263f056ce7afb8d653c4ba698d31fa8&" alt="Logo" style={styles.logo} />
+          <img src="https://cdn.discordapp.com/attachments/1274199397097406565/1274360821144879167/Screenshot_2024-08-17_at_09.34.41-removebg-preview.png?ex=66c1f880&is=66c0a700&hm=2ffafdb5bb8b4d077932ecf89b9529f28771cc002535283c0bfaf73769e2eca4&" alt="Logo" style={styles.logo} />
         </Link>
         <Link to="/about" style={styles.link}>About</Link>
         <Link to="/services" style={styles.link}>Services</Link>
