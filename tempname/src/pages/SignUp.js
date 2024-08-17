@@ -46,19 +46,20 @@ function SignUp() {
     if (verificationCode === generatedCode) {
       setIsVerified(true);
       setStatus('Email verified successfully!');
-      // Proceed to the next step or registration completion
     } else {
       setStatus('Verification code is incorrect. Please try again.');
     }
   };
 
   const verifyPasswords = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (password !== rePassword) {
-      window.alert('Passwords do not match')
+      setStatus('Passwords do not match.');
+      return;
     }
-    setPasswordVerified(true)
-  }
+    setPasswordVerified(true);
+    setStatus('Password successfully set.');
+  };
 
   const addEmailPasswordData = async (e) => {
     e.preventDefault();
@@ -68,17 +69,17 @@ function SignUp() {
       //   .insert([{ email, password }]);
       // if (error) throw error;
       // if (data) {
-      //   navigate('/profile')
+      //   navigate('/profile');
       // }
+      navigate('/profile'); // Navigate to profile after successful password set
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-    
-  }
+  };
 
   return (
     <div style={styles.container}>
-      <h2>Sign Up</h2>
+      <h2 style={styles.title}>Sign Up</h2>
 
       {!isVerified ? (
         <>
@@ -111,43 +112,37 @@ function SignUp() {
       ) : (
         <>
           <p style={styles.successMessage}>{status}</p>
-          <form onSubmit={(e) => verifyPasswords(e)} className='flex flex-col'>
+          <form onSubmit={verifyPasswords} style={styles.form}>
             <input
-              placeholder='Enter password'
-              className='mt-1 focus:outline-none border-2 border-gray-400 rounded-sm'
+              type="password"
+              placeholder="Enter password"
+              className="focus:outline-none border-2 border-gray-400 rounded-sm"
               onChange={(e) => setPassword(e.target.value)}
               value={password}
               required
+              style={styles.input}
             />
             <input
-              placeholder='Re-enter password'
-              className='focus:outline-none border-2 border-gray-400 rounded-sm'
+              type="password"
+              placeholder="Re-enter password"
+              className="focus:outline-none border-2 border-gray-400 rounded-sm"
               onChange={(e) => setRePassword(e.target.value)}
               value={rePassword}
               required
+              style={styles.input}
             />
-            <button className='border-2 border-black w-[10rem] justify-center'>set as password</button>
+            <button type="submit" style={styles.button}>Set Password</button>
           </form>
-          {passwordVerified && 'Password successfully set'}
-          {passwordVerified ? (
+          {passwordVerified && (
             <>
               <button
-                onClick={(e) => addEmailPasswordData(e)}
-                className='bg-green-400'
-              >
-                Proceed to Profile
-              </button>
-            </>
-          ): (
-            <>
-              <button
-                className='bg-gray-400'
+                onClick={addEmailPasswordData}
+                style={{ ...styles.button, backgroundColor: '#28a745' }} // Green button when password is verified
               >
                 Proceed to Profile
               </button>
             </>
           )}
-          
         </>
       )}
 
@@ -165,6 +160,12 @@ const styles = {
     border: '1px solid #ccc',
     borderRadius: '10px',
     backgroundColor: '#f9f9f9',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+  },
+  title: {
+    fontSize: '2rem',
+    marginBottom: '1.5rem',
+    color: '#0056b3', // Dark blue color
   },
   form: {
     display: 'flex',
@@ -179,6 +180,7 @@ const styles = {
     borderRadius: '5px',
     border: '1px solid #ccc',
     fontSize: '16px',
+    boxSizing: 'border-box',
   },
   button: {
     padding: '0.75rem 1.5rem',
@@ -189,6 +191,7 @@ const styles = {
     cursor: 'pointer',
     fontSize: '16px',
     marginTop: '1rem',
+    transition: 'background-color 0.3s ease',
   },
   status: {
     marginTop: '1rem',
@@ -197,7 +200,7 @@ const styles = {
   },
   successMessage: {
     fontSize: '16px',
-    color: '#28a745',
+    color: '#28a745', // Green for success messages
   },
 };
 
