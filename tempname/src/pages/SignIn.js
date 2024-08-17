@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase/supabase';
 
@@ -46,7 +46,7 @@ const SignIn = ({ onLogin }) => {
 
   return (
     <div style={styles.container}>
-      <h2>Sign In</h2>
+      <h2 style={styles.title}>Sign In</h2>
       <form onSubmit={handleSubmit} style={styles.form}>
         <input 
           type="text" 
@@ -70,8 +70,20 @@ const SignIn = ({ onLogin }) => {
 
 const styles = {
   container: {
+    marginTop: '5rem', // Space below the navbar
+    maxWidth: '400px',
+    margin: '0 auto',
     padding: '2rem',
     textAlign: 'center',
+    border: '1px solid #ccc',
+    borderRadius: '10px',
+    backgroundColor: '#f9f9f9',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+  },
+  title: {
+    fontSize: '2rem',
+    marginBottom: '1.5rem',
+    color: '#0056b3', // Dark blue color
   },
   form: {
     display: 'flex',
@@ -80,16 +92,23 @@ const styles = {
   },
   input: {
     margin: '0.5rem 0',
-    padding: '0.5rem',
-    width: '200px',
+    padding: '0.75rem',
+    width: '100%',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+    fontSize: '16px',
   },
   button: {
-    padding: '0.5rem 1rem',
-    backgroundColor: '#333',
+    padding: '0.75rem 1.5rem',
+    backgroundColor: '#0056b3', // Dark blue color
     color: 'white',
     border: 'none',
+    borderRadius: '5px',
     cursor: 'pointer',
-  }
+    fontSize: '16px',
+    marginTop: '1rem',
+    transition: 'background-color 0.3s ease',
+  },
 };
 
 export default SignIn;

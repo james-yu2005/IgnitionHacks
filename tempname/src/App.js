@@ -21,6 +21,7 @@ const App = () => {
   return (
     <Router>
       <NavBar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
+      <main>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/About" element={<About />} />
@@ -37,6 +38,8 @@ const App = () => {
           element={isAuthenticated ? <Settings /> : <Navigate to="/signin" />}
         />
       </Routes>
+      </main>
+      
       <ContactUs /> {/* This will render the Contact Us form at the bottom of every page */}
     </Router>
   );
