@@ -1,4 +1,6 @@
 import { React, useState } from 'react';
+import { supabase } from '../supabase/supabase';
+import { useLocation } from 'react-router-dom';
 
 const Profile = () => {
   const [firstname, setFirstName] = useState('');
@@ -10,8 +12,42 @@ const Profile = () => {
   const [education, setEducation] = useState('');
   const [connect, setConnect] = useState('');
   const [hours, setHours] = useState(0);
+
+  const location = useLocation();
+  const userId = location.state?.user_id;  // Correct key reference
+  console.log(userId)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { data, error } = await supabase
+        .from('info')
+        .insert([{
+          user_id: userId, 
+          name: firstname,
+          lastname,
+          phone:number,
+          postal:code,
+          city,
+          age,
+          education,
+          connection:connect,
+          hours,
+          created_at: new Date().toISOString()
+        }]);
+
+      if (error) throw error;
+
+      if (data) {
+        alert('Profile info saved successfully!');
+      }
+      // You can navigate to another page or show a success message
+    } catch (error) {
+      console.log('Error saving profile info:', error);
+    }
+  };
+
   return (
-    <div className=''>
+    <form onSubmit={handleSubmit}>
       <h2>Profile</h2>
       <div className='flex flex-row'>
         <div className='flex flex-col'>
@@ -101,7 +137,8 @@ const Profile = () => {
           />
         </div>
       </div>
-    </div>
+      <button type='submit'>submit</button>
+    </form>
   )
 }
 

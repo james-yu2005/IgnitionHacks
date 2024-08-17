@@ -84,9 +84,12 @@ function SignUp() {
       const { data, error } = await supabase
         .from('users')
         .insert([{ email, password, currentTimestamp }]);
+
       if (error) throw error;
-      
-      navigate('/profile');
+
+      const userId = data[0].id; // Get the user.id from the inserted data
+
+      navigate('/profile', { state: { user_id } });
       
     } catch (error) {
       console.log(error);

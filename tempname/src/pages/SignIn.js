@@ -22,9 +22,9 @@ const SignIn = ({ onLogin }) => {
       }
 
       if (data && data.length > 0) {
-        return true;
+        return data[0].id;
       } else {
-        return false;
+        return null;
       }
     } catch (error) {
       console.error('Error during authentication:', error);
@@ -35,11 +35,11 @@ const SignIn = ({ onLogin }) => {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const isAuthenticated = await authenticate();
-
-    if (isAuthenticated) {
+    const user_id = await authenticate();
+    console.log(user_id)
+    if (user_id) {
       onLogin(); 
-      navigate('/profile'); 
+      navigate('/profile', { state: { user_id } });
     } else {
       alert('User and password do not match');
     }
