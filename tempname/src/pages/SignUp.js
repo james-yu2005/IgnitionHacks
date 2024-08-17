@@ -79,9 +79,11 @@ function SignUp() {
   const addEmailPasswordData = async (e) => {
     e.preventDefault();
     try {
+      const currentTimestamp = new Date().toISOString();
+
       const { data, error } = await supabase
         .from('users')
-        .insert([{ email, password }]);
+        .insert([{ email, password, currentTimestamp }]);
       if (error) throw error;
       
       navigate('/profile');

@@ -32,12 +32,13 @@ const SignIn = ({ onLogin }) => {
     }
   };
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const isAuthenticated = await authenticate();
 
     if (isAuthenticated) {
-      onLogin(); // Set the authenticated state in App component
+      onLogin(); 
       navigate('/profile'); 
     } else {
       alert('User and password do not match');
@@ -97,6 +98,8 @@ const styles = {
     borderRadius: '5px',
     border: '1px solid #ccc',
     fontSize: '16px',
+    color: '#333', // Set the text color to dark gray (or use 'black' for black text)
+
   },
   button: {
     padding: '0.75rem 1.5rem',

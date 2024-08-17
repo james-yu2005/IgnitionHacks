@@ -1,8 +1,15 @@
-import React from 'react';
+import { React, useState } from 'react';
 
 const Profile = () => {
   const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('');
+  const [number, setNumber] = useState('');
+  const [code, setCode] = useState('');
+  const [city, setCity] = useState('');
+  const [age, setAge] = useState(0);
+  const [education, setEducation] = useState('');
+  const [connect, setConnect] = useState('');
+  const [hours, setHours] = useState(0);
   return (
     <div className=''>
       <h2>Profile</h2>
@@ -10,20 +17,92 @@ const Profile = () => {
         <div className='flex flex-col'>
           <p>First name: </p>
           <input
-            placeholder='first-name'
+            placeholder='Ex. John'
             value={firstname}
-            onChange={(e) => setFirstName(e)}
+            onChange={(e) => setFirstName(e.target.value)}
+            className='text-black'
           />
         </div>
-        <div>
-
+        <div className='flex flex-col'>
+          <p>Last name: </p>
+          <input
+            placeholder='Ex. Doe'
+            value={lastname}
+            onChange={(e) => setLastName(e.target.value)}
+            className='text-black'
+          />
+        </div>
+        <div className='flex flex-col'>
+          <p>Phone number (optional)</p>
+          <input
+            value={number}
+            onChange={(e) => setNumber(e.target.value)}
+            className='text-black'
+            placeholder='phone number'
+          />
         </div>
       </div>
-      
+      <div className='flex flex-row'>
+        
+        <div className='flex flex-col'>
+          <p>City</p>
+          <input
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            className='text-black'
+            placeholder='Ex. Markham'
+          />
+        </div>
+        <div className='flex flex-col'>
+          <p>Postal Code</p>
+          <input
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            className='text-black'
+            placeholder='Ex. L9B 3C7'
+          />
+        </div>
+        <div className='flex flex-col'>
+          <p>Age: </p>
+          <input
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+            className='text-black'
+            type='number'
+            placeholder='Ex. 19'
+          />
+        </div>
+      </div>
+      <div className='flex flex-row'>
+        <div className='flex flex-col text-black'>
+          <p>Education </p>
+          <select value={education} onChange={(e) => setEducation(e.target.value)}>
+            <option value="High School" className='text-black'>High School</option>
+            <option value="Undergraduate" className='text-black'>Undergraduate</option>
+            <option value="Post-graduate" className='text-black'>Post-graduate</option>
+          </select>
+        </div>
+        <div className='flex flex-col text-black'>
+          <p>How do you want to connect?</p>
+          <select value={connect} onChange={(e) => setConnect(e.target.value)}>
+            <option value="In-person" className='text-black'>In-person</option>
+            <option value="Hybrid" className='text-black'>Hybrid</option>
+            <option value="Online" className='text-black'>Online</option>
+          </select>
+        </div>
+        <div className='flex flex-col'>
+          <p>How many hours are you willing to commit (per week) ?</p>
+          <input
+            value={hours}
+            onChange={(e) => setHours(e.target.value)}
+            placeholder='Ex. 2'
+            type='nunmber'
+            className='text-black'
+          />
+        </div>
+      </div>
     </div>
-  );
-};
-
-
+  )
+}
 
 export default Profile;
