@@ -9,6 +9,8 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
+import ContactUs from './components/ContactUs';
+
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -35,6 +37,7 @@ const App = () => {
           element={isAuthenticated ? <Settings /> : <Navigate to="/signin" />}
         />
       </Routes>
+      <ContactUs /> {/* This will render the Contact Us form at the bottom of every page */}
     </Router>
   );
 };
