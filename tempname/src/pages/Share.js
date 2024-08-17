@@ -24,8 +24,8 @@ const Share = () => {
 
   useEffect(() => {
     const getUserInfo = async () => {
-      const getInfo = await canGetInfo(userId);
-      if (getInfo) {
+      const ableToGetInfo = await canGetInfo(userId);
+      if (ableToGetInfo) {
         const userInfo = await getInfo(userId)
         setFirstName(userInfo.name)
         setLastName(userInfo.lastname)

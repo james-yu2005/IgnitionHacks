@@ -1,11 +1,13 @@
 import React from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Landing = () => {
   const navigate = useNavigate();
 
   const location = useLocation();
   const user_id = location.state?.user_id;
+
+  console.log(user_id)
   const handleShareLink = () => {
     navigate('/share', { state: { user_id } });
   }

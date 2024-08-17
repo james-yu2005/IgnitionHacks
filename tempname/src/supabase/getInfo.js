@@ -1,7 +1,7 @@
 import { supabase } from "./supabase";
 
 export const canGetInfo = async (userId) => {
-    const { data, error } = await supabase 
+    const { error } = await supabase 
         .from('info')
         .select('*')
         .eq('user_id', userId)
