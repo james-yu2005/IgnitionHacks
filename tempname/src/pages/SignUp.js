@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import emailjs from 'emailjs-com';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../supabase/supabase';
 
 function SignUp() {
   const service_id = process.env.REACT_APP_EMAIL_SERVICE_ID;
@@ -9,12 +10,28 @@ function SignUp() {
 
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('');
+  const [password, setPassword] = useState('');
+  const [rePassword, setRePassword] = useState('');
+  const [passwordVerified, setPasswordVerified] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
   const [generatedCode, setGeneratedCode] = useState('');
   const [isVerified, setIsVerified] = useState(false);
 
   const navigate = useNavigate();
 
+  const addEmailPasswordData = async () => {
+    try {
+      console.log(supabase)
+      const { data, error } = await supabase
+        .from('users')
+        .insert({ email: email, password: password });
+
+      
+    } catch (error) {
+      console.log(error)
+    }
+    navigate('/profile')
+  }
   const handleEmailSubmit = (e) => {
     e.preventDefault();
 
@@ -48,6 +65,13 @@ function SignUp() {
     }
   };
 
+  const verifyPasswords = (e) => {
+    e.preventDefault()
+    if (password !== rePassword) {
+      window.alert('Passwords do not match')
+    }
+    setPasswordVerified(true)
+  }
   return (
     <div style={styles.container}>
       <h2>Sign Up</h2>
@@ -83,12 +107,41 @@ function SignUp() {
       ) : (
         <>
           <p style={styles.successMessage}>{status}</p>
-          <button
-            onClick={() => navigate('/profile')}
-            style={styles.proceedButton}
-          >
-            Proceed to Profile
-          </button>
+          <form onSubmit={(e) => verifyPasswords(e)} className='flex flex-col'>
+            <input
+              placeholder='Enter password'
+              className='mt-1 focus:outline-none border-2 border-gray-400 rounded-sm'
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <input
+              placeholder='Re-enter password'
+              className='focus:outline-none border-2 border-gray-400 rounded-sm'
+              onChange={(e) => setRePassword(e.target.value)}
+              required
+            />
+            <button className='border-2 border-black w-[10rem] justify-center'>set as password</button>
+          </form>
+          {passwordVerified && 'Password successfully set'}
+          {passwordVerified ? (
+            <>
+              <button
+                onClick={addEmailPasswordData}
+                className='bg-green-400'
+              >
+                Proceed to Profile
+              </button>
+            </>
+          ): (
+            <>
+              <button
+                className='bg-gray-400'
+              >
+                Proceed to Profile
+              </button>
+            </>
+          )}
+          
         </>
       )}
 
@@ -124,16 +177,6 @@ const styles = {
   button: {
     padding: '0.75rem 1.5rem',
     backgroundColor: '#0056b3', // Dark blue color
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '16px',
-    marginTop: '1rem',
-  },
-  proceedButton: {
-    padding: '0.75rem 1.5rem',
-    backgroundColor: '#28a745', // Green color
     color: 'white',
     border: 'none',
     borderRadius: '5px',
