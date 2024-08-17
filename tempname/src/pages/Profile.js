@@ -1,8 +1,9 @@
-import React, { useState, } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabase/supabase';
 import { useLocation } from 'react-router-dom';
 import  { insertInfo } from '../supabase/insertInfo';
 import { updateInfo } from '../supabase/updateInfo';
+import { getInfo } from '../supabase/getInfo';
 
 const Profile = () => {
   const [firstname, setFirstName] = useState('');
@@ -22,8 +23,25 @@ const Profile = () => {
 
   const location = useLocation();
   const userId = location.state?.user_id;  // Correct key reference
-  console.log(userId)
-  console.log(skill)
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const userInfo = await getInfo(userId)
+      console.log(userInfo)
+      setFirstName(userInfo.name)
+      setLastName(userInfo.lastname)
+      setAge(userInfo.age)
+      setCity(userInfo.city)
+      setConnect(userInfo.connection)
+      setEducation(userInfo.education)
+      setSkill(userInfo.skills)
+      setCode(userInfo.postal)
+      setNumber(userInfo.phone)
+      setHours(userInfo.hours)
+    }
+    getUserInfo();
+  }, [userId])
+
   const handleEditClick = () => {
     setIsEditing(true);
   };
@@ -92,7 +110,7 @@ const Profile = () => {
     setSelectedFiles([...e.target.files]);
   };
 
-const handleFileUpload = async () => {
+  const handleFileUpload = async () => {
     if (selectedFiles.length === 0) {
         alert('Please select files to upload.');
         return;
@@ -206,6 +224,7 @@ const handleFileUpload = async () => {
             disabled={!isEditing}
             style={isEditing ? styles.selectEditable : styles.select}
           >
+            <option value="" disabled selected>Select an option</option>
             <option value="High School">High School</option>
             <option value="Undergraduate">Undergraduate</option>
             <option value="Post-graduate">Post-graduate</option>
@@ -219,6 +238,7 @@ const handleFileUpload = async () => {
             disabled={!isEditing}
             style={isEditing ? styles.selectEditable : styles.select}
           >
+            <option value="" disabled selected>Select an option</option>
             <option value="In-person">In-person</option>
             <option value="Hybrid">Hybrid</option>
             <option value="Online">Online</option>
@@ -248,10 +268,23 @@ const handleFileUpload = async () => {
         </div>
         <div style={styles.column}>
           <label style={styles.label}>Supporting documents of your skill (max 3)</label>
-          <input type="file" onChange={handleFileChange} />
+          <input className='text-black' type="file" onChange={handleFileChange} multiple/>
           <button onClick={handleFileUpload}>Upload</button>
-          {uploadProgress > 0 && <p>Upload Progress: {uploadProgress}%</p>}
-        </div>
+          {selectedFiles.length > 0 && (
+            <ul>
+              {selectedFiles.map((file, index) => (
+                <li key={index}>{file.name}</li>
+              ))}
+            </ul>
+          )}
+          {Object.keys(uploadProgress).length > 0 && (
+            <div>
+              {Object.keys(uploadProgress).map((fileName, index) => (
+                <p key={index}>{fileName}: {uploadProgress[fileName]}%</p>
+              ))}
+            </div>
+          )}        
+          </div>
       </div>
       <div style={styles.buttonRow}>
         <button onClick={handleEditClick} style={styles.button}>Edit</button>
