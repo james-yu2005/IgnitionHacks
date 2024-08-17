@@ -6,7 +6,7 @@ const Home = () => {
     <div style={styles.container}>
       <section style={styles.heroSection}>
         <h1 style={styles.title}>EXPLORE MORE</h1>
-        <p style={styles.subtitle}>"Revolutionizing the knowledge economy"</p>
+        <p style={styles.subtitle}>"Trade Old Skills for New Skills"</p>
         <Link to="/signup" style={styles.signUpButton}>Sign Up Now!</Link>
         <p style={styles.loginText}>
           or <Link to="/signin" style={styles.loginLink}>Log in here</Link>
@@ -16,89 +16,80 @@ const Home = () => {
       <section style={styles.whatWeDoSection}>
         <h2 style={styles.sectionTitle}>What We Do</h2>
         <p style={styles.introParagraph}>
-          TalentTrade is a platform that connects people through the exchange of skills. Whether you're looking to learn something new, share your expertise, or get back into an old hobby, we make finding the perfect match painless.
+          Talent Trade is a platform designed to connect people through the exchange of skills. Whether you're looking to learn something new, share your expertise, or rekindle an old hobby, we make finding the perfect match effortless. Here’s how it works:
         </p>
-        <div style={styles.stepsContainer}>
-          <div style={styles.stepBox}>
-            <h3 style={styles.stepTitle}>Step 1: Showcase Your Talent</h3>
-            <p style={styles.stepDescription}>
-              Create a profile highlighting your unique skills, share your knowledge, and connect with others.
-            </p>
-          </div>
-          <div style={styles.arrow}>→</div>
-          <div style={styles.stepBox}>
-            <h3 style={styles.stepTitle}>Step 2: Engage with AI</h3>
-            <p style={styles.stepDescription}>
-              Our AI-powered system will help you find the best matches for skill exchange and collaboration.
-            </p>
-          </div>
-        </div>
-        <div style={styles.stepsContainer}>
-          <div style={styles.stepBox}>
-            <h3 style={styles.stepTitle}>Step 3: Monitor your email</h3>
-            <p style={styles.stepDescription}>
-              Check your email for your progress through the AI system. If there are any updates, we'll let you know!
-            </p>
-          </div>
-          <div style={styles.arrow}>→</div>
-          <div style={styles.stepBox}>
-            <h3 style={styles.stepTitle}>Step 4: Make a Connection</h3>
-            <p style={styles.stepDescription}>
-              Once you find a match that suits your needs, connect and start learning or teaching.
-            </p>
-          </div>
+        <div style={styles.verticalStepsContainer}>
+          <StepBox 
+            title="Showcase Your Talent" 
+            description="Create a portfolio highlighting your unique skills, whether it’s graphic design, coding, cooking, or any other talent you want to share." 
+          />
+          <StepBox 
+            title="Engage with AI" 
+            description="Our intelligent AI interface helps you find the right connections. Simply tell the AI what skill you want to learn or improve, and it will recommend users with relevant expertise. If you review their portfolio and like what you see, our AI will automatically send them an email with your connection request." 
+          />
+          <StepBox 
+            title="Monitor Your Email" 
+            description="Other users can find your profile through the AI chatbot and reach out to you. You can review their portfolio and decide if you would be willing to swap skills with them." 
+          />
+          <StepBox 
+            title="Make a Connection" 
+            description="Once you find someone whose skills match your needs, the AI facilitates the introduction by sharing your portfolio and contact information with them. If they’re interested in what you have to offer, you’re ready to swap skills!" 
+          />
         </div>
         <p style={styles.outroParagraph}>
-          At TalentTrade, we believe that learning is a collaborative journey. By connecting with others who have the skills you seek, you can more fully engage in your own journey of personal and professional growth. Join today and start trading your well-intentioned individuals right in your community—or across the globe.
+          At Talent Trade, we believe that learning is a collaborative journey. By connecting with others who have the skills you seek, you gain more than just knowledge—you gain valuable relationships and networking opportunities. Join us today and start trading talents with like-minded individuals in your community or across the globe.
         </p>
       </section>
 
       <section style={styles.differentSection}>
         <h2 style={styles.sectionTitle}>How Are We Different?</h2>
         <div style={styles.differentContainer}>
-          <div style={styles.differentBox}>
-            <h3 style={styles.differentTitle}>AI-Driven Connections</h3>
-            <p style={styles.differentDescription}>
-              Our AI system analyzes your skills and preferences to make the best possible match.
-            </p>
-          </div>
-          <div style={styles.differentBox}>
-            <h3 style={styles.differentTitle}>Tailored Educational Experiences</h3>
-            <p style={styles.differentDescription}>
-              Whether you're just starting out or looking to hone your skills, our platform tailors learning experiences to your needs.
-            </p>
-          </div>
+          <DifferentBox 
+            title="AI-Driven Connections" 
+            description="Our platform leverages advanced AI technology to create personalized connections. Instead of sifting through endless profiles, our AI curates matches based on your specific needs and interests, streamlining the process and saving you valuable time." 
+          />
+          <DifferentBox 
+            title="Private" 
+            description="Unlike other platforms, your portfolio isn’t posted publicly. It is securely stored and only shared with potential matches selected by our AI. This ensures that your information is seen only by people who are genuinely interested in connecting." 
+          />
         </div>
         <div style={styles.differentContainer}>
-          <div style={styles.differentBox}>
-            <h3 style={styles.differentTitle}>Purposeful Connections</h3>
-            <p style={styles.differentDescription}>
-              Connect with people who are passionate about what they do and eager to share their knowledge.
-            </p>
-          </div>
-          <div style={styles.differentBox}>
-            <h3 style={styles.differentTitle}>Private and Secure</h3>
-            <p style={styles.differentDescription}>
-              Unlike other platforms, we prioritize your privacy and ensure that your information is kept secure.
-            </p>
-          </div>
+          <DifferentBox 
+            title="Tailored Educational Experiences" 
+            description="Whether you’re seeking to develop a new skill or deepen your existing expertise, our AI learns from your preferences and goals to suggest the best partners for your learning journey, making the process more effective and enjoyable." 
+          />
+          <DifferentBox 
+            title="Purposeful Connections" 
+            description="We prioritize quality over quantity, fostering meaningful exchanges that benefit both parties. Our AI doesn’t just match you based on skills but also considers your commitment level by asking how many hours you’re willing to dedicate each week. This ensures that you’re paired with users who share your level of dedication, leading to more productive and balanced skill exchanges." 
+          />
         </div>
       </section>
 
-      <footer style={styles.footerSection}>
-        <h2 style={styles.footerTitle}>Contact Us</h2>
-        <p style={styles.footerText}>Phone: (647) 685 - 5940</p>
-        <p style={styles.footerText}>Email: talent.trade@gmail.com</p>
-        <p style={styles.footerText}>Address: 123 Main St, Toronto</p>
-      </footer>
     </div>
   );
 };
 
+const StepBox = ({ title, description }) => (
+  <div style={styles.stepBox}>
+    <h3 style={styles.stepTitle}>{title}</h3>
+    <p style={styles.stepDescription}>{description}</p>
+  </div>
+);
+
+const DifferentBox = ({ title, description }) => (
+  <div style={styles.differentBox}>
+    <h3 style={styles.differentTitle}>{title}</h3>
+    <p style={styles.differentDescription}>{description}</p>
+  </div>
+);
+
 const styles = {
   container: {
-    fontFamily: "'Akaya Telivigala', cursive",
+    fontFamily: "'Montserrat', sans-serif",
     color: '#333',
+    padding: '0', // Remove padding
+    margin: '0', // Remove margin
+    width: '100%', // Ensure full-width container
   },
   heroSection: {
     textAlign: 'center',
@@ -109,6 +100,7 @@ const styles = {
     backgroundSize: 'cover',
     minHeight: '100vh',
     color: 'white',
+    margin: '0', // Remove margin
   },
   title: {
     fontSize: '3rem',
@@ -119,7 +111,7 @@ const styles = {
     marginBottom: '40px',
   },
   signUpButton: {
-    backgroundColor: '#0056b3',
+    backgroundColor: '#000000',
     color: 'white',
     padding: '1rem 2rem',
     borderRadius: '30px',
@@ -137,9 +129,9 @@ const styles = {
     textDecoration: 'underline',
   },
   whatWeDoSection: {
-    backgroundColor: '#fff',
-    padding: '60px 20px',
+    backgroundColor: '#f0f0f0',
     textAlign: 'center',
+    width: '100%', // Ensure full-width
   },
   sectionTitle: {
     fontSize: '2.5rem',
@@ -149,20 +141,21 @@ const styles = {
     fontSize: '1.2rem',
     marginBottom: '40px',
     color: '#666',
+    padding: '0 20px', // Add padding for smaller screens
   },
-  stepsContainer: {
+  verticalStepsContainer: {
     display: 'flex',
-    justifyContent: 'center',
+    flexDirection: 'column', // Stack the boxes vertically
     alignItems: 'center',
     marginBottom: '40px',
   },
   stepBox: {
-    width: '250px',
+    width: '80%', // Ensure the boxes take up 80% of the width
     padding: '20px',
     backgroundColor: '#f0f0f0',
     borderRadius: '10px',
     boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
-    margin: '0 10px',
+    margin: '20px 0', // Add margin between boxes
     textAlign: 'center',
   },
   stepTitle: {
@@ -174,35 +167,34 @@ const styles = {
     fontSize: '1rem',
     color: '#666',
   },
-  arrow: {
-    fontSize: '2rem',
-    color: '#0056b3',
-  },
   outroParagraph: {
     fontSize: '1.2rem',
     marginTop: '20px',
     color: '#666',
+    padding: '0 20px', // Add padding for smaller screens
   },
   differentSection: {
     backgroundColor: '#447e7b',
-    padding: '60px 20px',
+    padding: '60px 0', // Remove side padding
     textAlign: 'center',
     color: 'white',
+    width: '100%', // Ensure full-width
   },
   differentContainer: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'space-between', // Use space between instead of center
     alignItems: 'flex-start',
-    flexWrap: 'wrap',
+    flexWrap: 'wrap', // Wrap boxes on smaller screens
   },
   differentBox: {
-    width: '300px',
+    flex: '1', // Allow different boxes to grow
     padding: '20px',
-    margin: '10px',
+    margin: '10px', // Adjusted margin for better spacing
     backgroundColor: '#78b7b3',
     borderRadius: '10px',
     boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
     textAlign: 'center',
+    minWidth: '300px', // Ensure a minimum width for smaller screens
   },
   differentTitle: {
     fontSize: '1.5rem',

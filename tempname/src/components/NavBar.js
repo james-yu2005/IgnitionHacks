@@ -81,7 +81,7 @@ const styles = {
     marginRight: '1rem',
   },
   getStartedButton: {
-    backgroundColor: '#0056b3', // Dark blue color
+    backgroundColor: '#000000', // Dark blue color
     color: 'white',
     border: 'none',
     padding: '0.5rem 1rem',
