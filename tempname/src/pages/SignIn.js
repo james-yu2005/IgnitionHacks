@@ -38,7 +38,7 @@ const SignIn = ({ onLogin }) => {
 
     if (isAuthenticated) {
       onLogin(); // Set the authenticated state in App component
-      navigate('/profile'); // Navigate to profile page
+      navigate('/profile'); 
     } else {
       alert('User and password do not match');
     }

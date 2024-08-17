@@ -1,26 +1,34 @@
-import React from 'react';
+import { React, useState } from 'react';
 
 const Profile = () => {
-  // Example user data, replace with real data fetch
-  const user = {
-    username: 'JohnDoe',
-    email: 'johndoe@example.com'
-  };
-
+  const [firstname, setFirstName] = useState('');
+  const [lastname, setLastName] = useState('');
   return (
-    <div style={styles.container}>
+    <div className=''>
       <h2>Profile</h2>
-      <p><strong>Username:</strong> {user.username}</p>
-      <p><strong>Email:</strong> {user.email}</p>
+      <div className='flex flex-row'>
+        <div className='flex flex-col'>
+          <p>First name: </p>
+          <input
+            placeholder='first-name'
+            value={firstname}
+            onChange={(e) => setFirstName(e)}
+          />
+        </div>
+          <p>Last name: </p>
+          <input
+            placeholder='last-name'
+            value={lastname}
+            onChange={(e) => setLastName(e)}
+          />
+        <div>
+        </div>
+      </div>
+      
     </div>
   );
 };
 
-const styles = {
-  container: {
-    padding: '2rem',
-    textAlign: 'center',
-  }
-};
+
 
 export default Profile;
