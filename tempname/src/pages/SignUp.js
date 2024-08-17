@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import emailjs from 'emailjs-com';
 import { useNavigate } from 'react-router-dom';
-// import { supabase } from '../supabase/supabase';
+import { supabase } from '../supabase/supabase';
 
 function SignUp() {
   const service_id = process.env.REACT_APP_EMAIL_SERVICE_ID;
@@ -64,14 +64,13 @@ function SignUp() {
   const addEmailPasswordData = async (e) => {
     e.preventDefault();
     try {
-      // const { data, error } = await supabase
-      //   .from('users')
-      //   .insert([{ email, password }]);
-      // if (error) throw error;
-      // if (data) {
-      //   navigate('/profile');
-      // }
-      navigate('/profile'); // Navigate to profile after successful password set
+      const { data, error } = await supabase
+        .from('users')
+        .insert([{ email, password }]);
+      if (error) throw error;
+      if (data) {
+        navigate('/profile');
+      }
     } catch (error) {
       console.log(error);
     }

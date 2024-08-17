@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-
 const Home = () => {
+  
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>EXPLORE MORE</h1>
