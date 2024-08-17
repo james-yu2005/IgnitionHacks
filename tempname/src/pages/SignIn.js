@@ -2,7 +2,7 @@ import { React, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase/supabase';
 
-const SignIn = () => {
+const SignIn = ({ onLogin }) => {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState('');
@@ -14,25 +14,33 @@ const SignIn = () => {
         .from('users')
         .select('*')
         .eq('email', username)
-        .eq('password', password)
-        
-      if (data.length > 0) {
+        .eq('password', password);
+
+      if (error) {
+        console.error('Authentication error:', error);
+        return false;
+      }
+
+      if (data && data.length > 0) {
         return true;
       } else {
         return false;
       }
     } catch (error) {
-      console.log(error)
+      console.error('Error during authentication:', error);
+      return false;
     }
-  }
-  const handleSubmit = (e) => {
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Assume authentication is successful
-    const auth = authenticate()
-    if (auth) {
-      navigate('/profile');
+    const isAuthenticated = await authenticate();
+
+    if (isAuthenticated) {
+      onLogin(); // Set the authenticated state in App component
+      navigate('/profile'); // Navigate to profile page
     } else {
-      alert('user and password are not a match')
+      alert('User and password do not match');
     }
   };
 
@@ -40,8 +48,20 @@ const SignIn = () => {
     <div style={styles.container}>
       <h2>Sign In</h2>
       <form onSubmit={handleSubmit} style={styles.form}>
-        <input type="text" placeholder="Username" style={styles.input} required onChange={(e) => setUsername(e.target.value)}/>
-        <input type="password" placeholder="Password" style={styles.input} onChange={(e) => setPassword(e.target.value)}required />
+        <input 
+          type="text" 
+          placeholder="Username" 
+          style={styles.input} 
+          required 
+          onChange={(e) => setUsername(e.target.value)} 
+        />
+        <input 
+          type="password" 
+          placeholder="Password" 
+          style={styles.input} 
+          required 
+          onChange={(e) => setPassword(e.target.value)} 
+        />
         <button type="submit" style={styles.button}>Sign In</button>
       </form>
     </div>

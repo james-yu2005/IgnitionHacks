@@ -19,8 +19,23 @@ function SignUp() {
 
   const navigate = useNavigate();
 
-  const handleEmailSubmit = (e) => {
+  const handleEmailSubmit = async (e) => {
     e.preventDefault();
+
+    const { data: check, error: checkError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', email)
+        .limit(1)
+
+      if (checkError) {
+        console.log(checkError)
+      }
+
+      if (check && check.length > 0) {
+        alert('This email already exists, please sign in instead')
+        return;
+      }
 
     const code = Math.floor(100000 + Math.random() * 900000).toString(); // Generate a random 6-digit code
     setGeneratedCode(code);
@@ -68,9 +83,9 @@ function SignUp() {
         .from('users')
         .insert([{ email, password }]);
       if (error) throw error;
-      if (data) {
-        navigate('/profile');
-      }
+      
+      navigate('/profile');
+      
     } catch (error) {
       console.log(error);
     }
