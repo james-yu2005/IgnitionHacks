@@ -3,7 +3,7 @@ import { supabase } from '../supabase/supabase';
 import { useLocation } from 'react-router-dom';
 import  { insertInfo } from '../supabase/insertInfo';
 import { updateInfo } from '../supabase/updateInfo';
-import { getInfo } from '../supabase/getInfo';
+import { getInfo, canGetInfo } from '../supabase/getInfo';
 
 const Share = () => {
   const [firstname, setFirstName] = useState('');
@@ -24,17 +24,20 @@ const Share = () => {
 
   useEffect(() => {
     const getUserInfo = async () => {
-      const userInfo = await getInfo(userId)
-      setFirstName(userInfo.name)
-      setLastName(userInfo.lastname)
-      setAge(userInfo.age)
-      setCity(userInfo.city)
-      setConnect(userInfo.connection)
-      setEducation(userInfo.education)
-      setSkill(userInfo.skills)
-      setCode(userInfo.postal)
-      setNumber(userInfo.phone)
-      setHours(userInfo.hours)
+      const getInfo = await canGetInfo(userId);
+      if (getInfo) {
+        const userInfo = await getInfo(userId)
+        setFirstName(userInfo.name)
+        setLastName(userInfo.lastname)
+        setAge(userInfo.age)
+        setCity(userInfo.city)
+        setConnect(userInfo.connection)
+        setEducation(userInfo.education)
+        setSkill(userInfo.skills)
+        setCode(userInfo.postal)
+        setNumber(userInfo.phone)
+        setHours(userInfo.hours)
+      }
     }
     getUserInfo();
   }, [userId])
