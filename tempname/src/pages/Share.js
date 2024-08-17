@@ -3,7 +3,7 @@ import { supabase } from '../supabase/supabase';
 import { useLocation } from 'react-router-dom';
 import  { insertInfo } from '../supabase/insertInfo';
 import { updateInfo } from '../supabase/updateInfo';
-import { getInfo, canGetInfo } from '../supabase/getInfo';
+import { getInfo } from '../supabase/getInfo';
 
 const Share = () => {
   const [firstname, setFirstName] = useState('');
@@ -18,14 +18,15 @@ const Share = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [skill, setSkill] = useState('');
   const [selectedFiles, setSelectedFiles] = useState(null);
+  const [available, setAvailable] = useState(false);
 
   const location = useLocation();
   const userId = location.state?.user_id; 
 
   useEffect(() => {
     const getUserInfo = async () => {
-      const ableToGetInfo = await canGetInfo(userId);
-      if (ableToGetInfo) {
+      const userInfo = await getInfo(userId)
+      if (userInfo) {
         const userInfo = await getInfo(userId)
         setFirstName(userInfo.name)
         setLastName(userInfo.lastname)
@@ -37,6 +38,7 @@ const Share = () => {
         setCode(userInfo.postal)
         setNumber(userInfo.phone)
         setHours(userInfo.hours)
+        setAvailable(true);
       }
     }
     getUserInfo();
@@ -46,28 +48,8 @@ const Share = () => {
     setIsEditing(true);
   };
 
-  const checkAvailable = async () => {
-  
-    const { data, error } = await supabase
-      .from('info')
-      .select('*')
-      .eq('user_id', userId)
-      .limit(1)
-    
-    if (error) {
-      console.log(error)
-    }
-
-    if (data) {
-      return false;
-    }
-    return true;
-  }
-
   const handleConfirmClick = async () => {
     try {
-      const available = await checkAvailable();
-
       const parsedAge = age ? parseInt(age, 10) : null;
       const parsedHours = hours ? parseInt(hours, 10) : null;
 
@@ -89,7 +71,8 @@ const Share = () => {
         hours: parsedHours,
         skills: skill,
       };
-      if (!available) {
+      console.log(available)
+      if (available) {
         await updateInfo(payload, userId)
         setIsEditing(false);
         alert('Profile updated successfully!');
@@ -298,9 +281,6 @@ const styles = {
   column: {
     flex: '1',
     marginRight: '1rem',
-    ':last-child': {
-      marginRight: 0,
-    },
   },
   label: {
     marginBottom: '0.5rem',

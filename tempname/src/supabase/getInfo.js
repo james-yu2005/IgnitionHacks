@@ -1,16 +1,5 @@
 import { supabase } from "./supabase";
 
-export const canGetInfo = async (userId) => {
-    const { error } = await supabase 
-        .from('info')
-        .select('*')
-        .eq('user_id', userId)
-    
-    if (error) {
-        return false;
-    }
-    return true;
-}
 export const getInfo = async (userId) => {
     const { data, error } = await supabase
         .from('info')
@@ -18,7 +7,8 @@ export const getInfo = async (userId) => {
         .eq('user_id', userId)
     
     if (error) {
-        throw new Error('Error getting user info')
+        console.log(error)
+        return null;
     }
 
     return data[0];
