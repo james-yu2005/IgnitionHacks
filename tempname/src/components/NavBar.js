@@ -33,12 +33,21 @@ const NavBar = ({ isAuthenticated, handleLogout }) => {
 
 const styles = {
   nav: {
+    position: 'absolute', // Allows the navbar to overlap content
+    top: 0, // Positions the navbar at the top of the page
+    left: 0, // Aligns the navbar to the left edge
+    width: '100%', // Ensures the navbar spans the entire width of the screen
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '1rem',
+<<<<<<< HEAD
     backgroundColor: 'rgba(68,126,123, 0.50)', // Darker turquoise
+=======
+    backgroundColor: 'rgba(68, 126, 123, 0.50)', // Turquoise with 50% opacity
+>>>>>>> 78f594b0e6edbe0299dd996973c2c46a3818b528
     color: 'white',
+    zIndex: 1000, // Ensures the navbar stays on top of other content
   },
   leftSection: {
     display: 'flex',
