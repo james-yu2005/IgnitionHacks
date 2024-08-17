@@ -1,13 +1,25 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const Landing = () => {
+  const navigate = useNavigate();
+
+  const location = useLocation();
+  const user_id = location.state?.user_id;
+  const handleShareLink = () => {
+    navigate('/share', { state: { user_id } });
+  }
+
+  const handleConnectLink = () => {
+    navigate('/connect', { state: { user_id } });
+  }
+  
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>What would you like to do?</h2>
       <div style={styles.buttonContainer}>
-        <Link to="/share" style={styles.button}>Share a Skill</Link>
-        <Link to="/connect" style={styles.button}>Connect with Others</Link>
+        <button style={styles.button} onClick={handleShareLink}>Share a Skill</button>
+        <button style={styles.button} onClick={handleConnectLink}>Connect with Others</button>
       </div>
     </div>
   );
