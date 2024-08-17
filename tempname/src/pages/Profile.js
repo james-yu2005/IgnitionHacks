@@ -1,7 +1,6 @@
 import React, { useState, } from 'react';
 import { supabase } from '../supabase/supabase';
 import { useLocation } from 'react-router-dom';
-import { EmbedSkill } from '../components/EmbedSkill';
 import  { insertInfo } from '../supabase/insertInfo';
 import { updateInfo } from '../supabase/updateInfo';
 
@@ -24,7 +23,7 @@ const Profile = () => {
   const location = useLocation();
   const userId = location.state?.user_id;  // Correct key reference
   console.log(userId)
-
+  console.log(skill)
   const handleEditClick = () => {
     setIsEditing(true);
   };
@@ -59,8 +58,8 @@ const Profile = () => {
         return;
       }
       
-      const embeddings = await EmbedSkill(skill)
-      console.log(embeddings)
+      console.log(skill)
+    
       const payload = {
         user_id: userId,
         name: firstname,
@@ -73,7 +72,6 @@ const Profile = () => {
         connection: connect,
         hours: parsedHours,
         skills: skill,
-        embed_skills: embeddings
       };
       console.log(available)
       if (!available) {
@@ -86,7 +84,7 @@ const Profile = () => {
         alert('Profile added successfully!');
       }
     } catch (error) {
-      console.log('Error updating profile info:', error);
+      console.log('Error with profile info:', error);
     }
   };
 
