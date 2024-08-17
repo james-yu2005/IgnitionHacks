@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import emailjs from 'emailjs-com';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../supabase/supabase';
+// import { supabase } from '../supabase/supabase';
 
 function SignUp() {
   const service_id = process.env.REACT_APP_EMAIL_SERVICE_ID;
@@ -19,19 +19,6 @@ function SignUp() {
 
   const navigate = useNavigate();
 
-  const addEmailPasswordData = async () => {
-    try {
-      console.log(supabase)
-      const { data, error } = await supabase
-        .from('users')
-        .insert({ email: email, password: password });
-
-      
-    } catch (error) {
-      console.log(error)
-    }
-    navigate('/profile')
-  }
   const handleEmailSubmit = (e) => {
     e.preventDefault();
 
@@ -72,6 +59,23 @@ function SignUp() {
     }
     setPasswordVerified(true)
   }
+
+  const addEmailPasswordData = async (e) => {
+    e.preventDefault();
+    try {
+      // const { data, error } = await supabase
+      //   .from('users')
+      //   .insert([{ email, password }]);
+      // if (error) throw error;
+      // if (data) {
+      //   navigate('/profile')
+      // }
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
+
   return (
     <div style={styles.container}>
       <h2>Sign Up</h2>
@@ -112,12 +116,14 @@ function SignUp() {
               placeholder='Enter password'
               className='mt-1 focus:outline-none border-2 border-gray-400 rounded-sm'
               onChange={(e) => setPassword(e.target.value)}
+              value={password}
               required
             />
             <input
               placeholder='Re-enter password'
               className='focus:outline-none border-2 border-gray-400 rounded-sm'
               onChange={(e) => setRePassword(e.target.value)}
+              value={rePassword}
               required
             />
             <button className='border-2 border-black w-[10rem] justify-center'>set as password</button>
@@ -126,7 +132,7 @@ function SignUp() {
           {passwordVerified ? (
             <>
               <button
-                onClick={addEmailPasswordData}
+                onClick={(e) => addEmailPasswordData(e)}
                 className='bg-green-400'
               >
                 Proceed to Profile
