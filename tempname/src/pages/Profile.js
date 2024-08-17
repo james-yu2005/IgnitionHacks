@@ -14,7 +14,8 @@ const Profile = () => {
   const [hours, setHours] = useState(0);
 
   const location = useLocation();
-  const userId = location.state?.user_id;  // Correct key reference
+  const userId = location.state?.user_id; 
+  
   console.log(userId)
   const handleSubmit = async (e) => {
     e.preventDefault();
