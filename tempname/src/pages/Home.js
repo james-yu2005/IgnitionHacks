@@ -26,6 +26,7 @@ const styles = {
     backgroundPosition: 'center center',
     backgroundSize: 'cover',
     minHeight: '100vh',
+    fontFamily: "'Akaya Telivigala', cursive",
   },
   title: {
     fontSize: '3rem',

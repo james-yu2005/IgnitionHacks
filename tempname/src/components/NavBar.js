@@ -37,7 +37,7 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '1rem',
-    backgroundColor: '#447e7b', // Darker turquoise
+    backgroundColor: 'rgba(68,126,123, 0.50)', // Darker turquoise
     color: 'white',
   },
   leftSection: {
