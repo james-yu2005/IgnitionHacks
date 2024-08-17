@@ -7,7 +7,8 @@ export const getInfo = async (userId) => {
         .eq('user_id', userId)
     
     if (error) {
-        throw new Error('Error getting user info')
+        console.log(error)
+        return null;
     }
 
     return data[0];

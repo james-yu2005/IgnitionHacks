@@ -8,6 +8,7 @@ const SignIn = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   
+
   const authenticate = async () => {
     try {
       const { data, error } = await supabase
@@ -53,6 +54,7 @@ const SignIn = ({ onLogin }) => {
           type="text" 
           placeholder="Username" 
           style={styles.input} 
+          value={username}
           required 
           onChange={(e) => setUsername(e.target.value)} 
         />
@@ -61,6 +63,7 @@ const SignIn = ({ onLogin }) => {
           placeholder="Password" 
           style={styles.input} 
           required 
+          value={password}
           onChange={(e) => setPassword(e.target.value)} 
         />
         <button type="submit" style={styles.button}>Sign In</button>

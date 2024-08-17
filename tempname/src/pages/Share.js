@@ -18,6 +18,7 @@ const Share = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [skill, setSkill] = useState('');
   const [selectedFiles, setSelectedFiles] = useState(null);
+  const [available, setAvailable] = useState(false);
 
   const location = useLocation();
   const userId = location.state?.user_id; 
@@ -25,16 +26,20 @@ const Share = () => {
   useEffect(() => {
     const getUserInfo = async () => {
       const userInfo = await getInfo(userId)
-      setFirstName(userInfo.name)
-      setLastName(userInfo.lastname)
-      setAge(userInfo.age)
-      setCity(userInfo.city)
-      setConnect(userInfo.connection)
-      setEducation(userInfo.education)
-      setSkill(userInfo.skills)
-      setCode(userInfo.postal)
-      setNumber(userInfo.phone)
-      setHours(userInfo.hours)
+      if (userInfo) {
+        const userInfo = await getInfo(userId)
+        setFirstName(userInfo.name)
+        setLastName(userInfo.lastname)
+        setAge(userInfo.age)
+        setCity(userInfo.city)
+        setConnect(userInfo.connection)
+        setEducation(userInfo.education)
+        setSkill(userInfo.skills)
+        setCode(userInfo.postal)
+        setNumber(userInfo.phone)
+        setHours(userInfo.hours)
+        setAvailable(true);
+      }
     }
     getUserInfo();
   }, [userId])
@@ -43,28 +48,8 @@ const Share = () => {
     setIsEditing(true);
   };
 
-  const checkAvailable = async () => {
-  
-    const { data, error } = await supabase
-      .from('info')
-      .select('*')
-      .eq('user_id', userId)
-      .limit(1)
-    
-    if (error) {
-      console.log(error)
-    }
-
-    if (data) {
-      return false;
-    }
-    return true;
-  }
-
   const handleConfirmClick = async () => {
     try {
-      const available = await checkAvailable();
-
       const parsedAge = age ? parseInt(age, 10) : null;
       const parsedHours = hours ? parseInt(hours, 10) : null;
 
@@ -86,7 +71,8 @@ const Share = () => {
         hours: parsedHours,
         skills: skill,
       };
-      if (!available) {
+      console.log(available)
+      if (available) {
         await updateInfo(payload, userId)
         setIsEditing(false);
         alert('Profile updated successfully!');
@@ -295,9 +281,6 @@ const styles = {
   column: {
     flex: '1',
     marginRight: '1rem',
-    ':last-child': {
-      marginRight: 0,
-    },
   },
   label: {
     marginBottom: '0.5rem',
