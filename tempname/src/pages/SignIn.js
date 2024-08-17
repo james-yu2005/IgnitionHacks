@@ -39,7 +39,7 @@ const SignIn = ({ onLogin }) => {
     console.log(user_id)
     if (user_id) {
       onLogin(); 
-      navigate('/profile', { state: { user_id } });
+      navigate('/landing', { state: { user_id } });
     } else {
       alert('User and password do not match');
     }
