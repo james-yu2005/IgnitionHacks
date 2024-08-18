@@ -277,7 +277,7 @@ const styles = {
   },
   title1: {
     textAlign: 'center',
-    marginBottom: '1rem',
+    marginBottom: '0.5rem',
     fontSize: '2rem',
     color: '#2A4A4C',
     fontWeight: 'bold',
