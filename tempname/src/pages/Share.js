@@ -13,7 +13,7 @@ const Share = ({ userId }) => {
   const [age, setAge] = useState('');
   const [education, setEducation] = useState('');
   const [connect, setConnect] = useState('');
-  const [hours, setHours] = useState('');
+  const [hours, setHours] = useState('');  // This now represents the level of dedication
   const [isEditing, setIsEditing] = useState(false);
   const [skill, setSkill] = useState('');
   const [selectedFiles, setSelectedFiles] = useState(null);
@@ -28,24 +28,23 @@ const Share = ({ userId }) => {
     document.body.style.padding = '0';
 
     const getUserInfo = async () => {
-      const userInfo = await getInfo(userId)
+      const userInfo = await getInfo(userId);
       if (userInfo) {
-        const userInfo = await getInfo(userId)
-        setFirstName(userInfo.name)
-        setLastName(userInfo.lastname)
-        setAge(userInfo.age)
-        setCity(userInfo.city)
-        setConnect(userInfo.connection)
-        setEducation(userInfo.education)
-        setSkill(userInfo.skills)
-        setCode(userInfo.postal)
-        setNumber(userInfo.phone)
-        setHours(userInfo.hours)
+        setFirstName(userInfo.name);
+        setLastName(userInfo.lastname);
+        setAge(userInfo.age);
+        setCity(userInfo.city);
+        setConnect(userInfo.connection);
+        setEducation(userInfo.education);
+        setSkill(userInfo.skills);
+        setCode(userInfo.postal);
+        setNumber(userInfo.phone);
+        setHours(userInfo.hours);
         setAvailable(true);
       }
-    }
+    };
     getUserInfo();
-  }, [userId])
+  }, [userId]);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -53,18 +52,12 @@ const Share = ({ userId }) => {
 
   const handleConfirmClick = async () => {
     if (!firstname || !lastname || !city || !education || !hours || !number || !code || !connect || !age || !skill) {
-      alert('Fill in all fields')
+      alert('Fill in all fields');
       return;
     }
     try {
       const parsedAge = age ? parseInt(age, 10) : null;
-      const parsedHours = hours ? parseInt(hours, 10) : null;
 
-      if (isNaN(parsedAge) || isNaN(parsedHours)) {
-        alert('Please enter valid numbers for age and hours.');
-        return;
-      }
-          
       const payload = {
         user_id: userId,
         name: firstname,
@@ -75,16 +68,16 @@ const Share = ({ userId }) => {
         age: parsedAge,
         education,
         connection: connect,
-        hours: parsedHours,
+        hours,  // Level of dedication as hours
         skills: skill,
       };
-      console.log(available)
+
       if (available) {
-        await updateInfo(payload, userId)
+        await updateInfo(payload, userId);
         setIsEditing(false);
         alert('Profile updated successfully!');
       } else {
-        await insertInfo(payload)
+        await insertInfo(payload);
         setIsEditing(false);
         alert('Profile added successfully!');
       }
@@ -102,12 +95,8 @@ const Share = ({ userId }) => {
 
   const handleFileUpload = async () => {
     if (selectedFiles === null) {
-      alert('Please select file to upload or select a new file')
+      alert('Please select file to upload or select a new file');
       return;
-    }
-    if (selectedFiles.length === 0) {
-        alert('Please select file to upload.');
-        return;
     }
     
     const file = selectedFiles;
@@ -204,7 +193,7 @@ const Share = ({ userId }) => {
             disabled={!isEditing}
             style={isEditing ? styles.selectEditable : styles.select}
           >
-            <option value="" disabled selected>Select an option</option>
+            <option value="" disabled>Select an option</option>
             <option value="High School">High School</option>
             <option value="Undergraduate">Undergraduate</option>
             <option value="Post-graduate">Post-graduate</option>
@@ -218,21 +207,24 @@ const Share = ({ userId }) => {
             disabled={!isEditing}
             style={isEditing ? styles.selectEditable : styles.select}
           >
-            <option value="" disabled selected>Select an option</option>
+            <option value="" disabled>Select an option</option>
             <option value="In-person">In-person</option>
             <option value="Hybrid">Hybrid</option>
             <option value="Online">Online</option>
           </select>
         </div>
         <div style={styles.column}>
-          <label style={styles.label}>How many weekly hours?</label>
-          <input
-            type="number"
-            value={hours}
+          <label style={styles.label}>Level of Dedication</label>
+          <select
+            value={hours}  // Representing level of dedication
             onChange={(e) => setHours(e.target.value)}
             disabled={!isEditing}
-            style={isEditing ? styles.inputEditable : styles.input}
-          />
+            style={isEditing ? styles.selectEditable : styles.select}
+          >
+            <option value="" disabled>Select an option</option>
+            <option value="Casual (1-2hrs/wk)">Casual (1-2hrs/wk)</option>
+            <option value="Serious (3+ hrs/wk)">Serious (3+ hrs/wk)</option>
+          </select>
         </div>
       </div>
       <div style={styles.row}>
@@ -262,7 +254,6 @@ const Share = ({ userId }) => {
 };
 
 const styles = {
-  
   container: {
     marginTop: '5rem',
     display: 'flex',
