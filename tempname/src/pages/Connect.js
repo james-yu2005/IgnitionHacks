@@ -36,6 +36,7 @@ const Connect = () => {
             content: `This is the data: ${skillsData}. I want this to learn this type of skill: ${iwant}. Which user_id matches the task and why do their skills match my wishes?`,
           },
         ],
+        max_tokens: 500, 
       });
   
       console.log(completion.choices[0].message);

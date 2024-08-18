@@ -18,7 +18,7 @@ function SignUp() {
   const [isVerified, setIsVerified] = useState(false);
 
   const navigate = useNavigate();
-
+  
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
 
@@ -83,7 +83,7 @@ function SignUp() {
 
       const { error } = await supabase
         .from('users')
-        .insert([{ email, password, currentTimestamp }]);
+        .insert([{ email, password, created_at: currentTimestamp }]);
 
       if (error) throw error;
 
@@ -148,12 +148,11 @@ function SignUp() {
               required
               style={styles.input}
             />
-            <button type="submit" style={styles.button}>Set Password</button>
+            <button type="submit" style={styles.button} onClick={addEmailPasswordData}>Set Password</button>
           </form>
           {passwordVerified && (
             <>
               <button
-                onClick={addEmailPasswordData}
                 style={{ ...styles.button, backgroundColor: '#28a745' }} // Green button when password is verified
               >
                 Proceed to Profile
