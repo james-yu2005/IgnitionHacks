@@ -158,7 +158,7 @@ Here is your users' data: ${UserData}`
             style={styles.input}
             placeholder="Enter User ID..."
           />
-          <button onClick={handleViewProfile} style={styles.button}>
+          <button onClick={handleViewProfile} style={styles.viewProfileButton}>
             View Profile
           </button>
         </div>
@@ -246,11 +246,27 @@ const styles = {
   profileSection: {
     flex: 1,
     textAlign: 'center',
+    backgroundColor: '#e0e0e0',
+    padding: '1rem',
+    borderRadius: '10px',
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
   },
   profileTitle: {
     marginBottom: '1rem',
     fontSize: '1.5rem',
     color: '#31595B',
+  },
+  viewProfileButton: {
+    padding: '0.75rem 1rem',
+    fontSize: '1rem',
+    backgroundColor: '#2A4A4C',
+    color: 'white',
+    border: 'none',
+    borderRadius: '30px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease',
+    width: '60%', 
+    marginTop: '2rem', 
   },
 };
 
