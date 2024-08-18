@@ -20,6 +20,13 @@ const Share = ({ userId }) => {
   const [available, setAvailable] = useState(false);
 
   useEffect(() => {
+    document.body.style.backgroundImage = 'url("/allback.png")';
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundRepeat = 'no-repeat';
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+
     const getUserInfo = async () => {
       const userInfo = await getInfo(userId)
       if (userInfo) {
@@ -122,7 +129,8 @@ const Share = ({ userId }) => {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Profile - press "Edit"</h2>
+      <h2 style={styles.title1}>SHARE - Create Your Profile</h2>
+      <h2 style={styles.title2}>Click on "Edit" to start</h2>
       <div style={styles.row}>
         <div style={styles.column}>
           <label style={styles.label}>First name</label>
@@ -246,14 +254,15 @@ const Share = ({ userId }) => {
           
       </div>
       <div style={styles.buttonRow}>
-        <button onClick={handleEditClick} style={styles.button}>Edit</button>
-        <button onClick={handleConfirmClick} style={styles.button} disabled={!isEditing}>Confirm</button>
+        <button onClick={handleEditClick} style={styles.button}>EDIT</button>
+        <button onClick={handleConfirmClick} style={styles.button} disabled={!isEditing}>CONFIRM</button>
       </div>
     </div>
   );
 };
 
 const styles = {
+  
   container: {
     marginTop: '5rem',
     display: 'flex',
@@ -266,11 +275,18 @@ const styles = {
     maxWidth: '800px',
     margin: '0 auto',
   },
-  title: {
+  title1: {
     textAlign: 'center',
-    marginBottom: '1.5rem',
+    marginBottom: '1rem',
     fontSize: '2rem',
-    color: '#0056b3',
+    color: '#2A4A4C',
+    fontWeight: 'bold',
+  },
+  title2: {
+    textAlign: 'center',
+    marginBottom: '1rem',
+    fontSize: '1rem',
+    color: '#2A4A4C',
   },
   row: {
     display: 'flex',
@@ -284,7 +300,7 @@ const styles = {
   },
   label: {
     marginBottom: '0.5rem',
-    color: '#333',
+    color: '#2A4A4C',
     fontWeight: 'bold',
     fontSize: '1rem',
   },
@@ -339,13 +355,14 @@ const styles = {
     marginTop: '1rem',
   },
   button: {
-    padding: '0.75rem 1.5rem',
+    padding: '0.75rem 4rem',
     fontSize: '1rem',
-    backgroundColor: '#0056b3',
+    backgroundColor: '#011312',
     color: 'white',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '30px',
     cursor: 'pointer',
+    fontWeight: 'bold',
     transition: 'background-color 0.3s ease',
   },
 };
