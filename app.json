@@ -1,0 +1,23 @@
+{
+    "name": "TalentTrade",
+    "description": "Trade talents with people",
+    "scripts": {
+      "postdeploy": "cd server && npm install"
+    },
+    "env": {},
+    "formation": {},
+    "addons": [],
+    "buildpacks": [
+      {
+        "url": "heroku/nodejs"
+      }
+    ],
+    "environments": {
+      "production": {
+        "scripts": {
+          "start": "cd server && node server.js"
+        }
+      }
+    }
+  }
+  
