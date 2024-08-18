@@ -60,7 +60,7 @@ const styles = {
     position: 'relative', // Make sure the parent container is positioned relatively
     textAlign: 'center',
     padding: '100px 20px',
-    backgroundImage: `url('/images/titletext.png')`,
+    backgroundImage: `url('/titletext.png')`,
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center center',
     backgroundSize: 'cover',
