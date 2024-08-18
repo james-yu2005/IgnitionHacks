@@ -3,8 +3,9 @@ import { useParams } from 'react-router-dom';
 import { supabase } from '../supabase/supabase';
 
 const Profile = () => {
-  const { userId } = useParams(); // Get the userId from the URL
+  const { userId } = useParams(); 
   const [userData, setUserData] = useState(null);
+  const [files, setFiles] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -20,8 +21,36 @@ const Profile = () => {
         setUserData(data);
       }
     };
-
     fetchUserData();
+  }, [userId]);
+
+  useEffect(() => {
+    const fetchUserDocuments = async () => {
+      try {
+        const { data, error } = await supabase
+          .storage
+          .from('skill_proof')
+          .list(`user_id-${userId}`, { recursive: false });
+  
+        if (error) {
+          throw error;
+        }
+
+        const fileUrls = data.map(async (file) => {
+          const path = `https://afsvhrnahrtjktyjmpgf.supabase.co/storage/v1/object/public/skill_proof/user_id-${userId}/${file.name}`.toString()
+          return { name: file.name, url: path };
+        });
+  
+        // Resolve all promises and update state
+        const resolvedUrls = await Promise.all(fileUrls);
+        setFiles(resolvedUrls);
+        console.log(resolvedUrls)
+      } catch (error) {
+        console.error('Error fetching user documents:', error);
+      }
+    };
+
+    fetchUserDocuments();
   }, [userId]);
 
   if (!userData) {
@@ -31,7 +60,7 @@ const Profile = () => {
   return (
     <div style={styles.container}>
       <h2 style={styles.profileTitle}>Profile</h2>
-      <div style={styles.profileSection}>
+      <div style={styles.profileSection} className='flex flex-col'>
         <div style={styles.infoBox}>
           <h3 style={styles.skillTitle}>Basic Information</h3>
           <p><strong>Account id:</strong> {userData.user_id}</p>
@@ -46,6 +75,19 @@ const Profile = () => {
           <p><strong>Summary:</strong> {userData.skills}</p>
           <p><strong>Connection type:</strong> {userData.connection}</p>
           <p><strong>Commitment - hrs/wk:</strong> {userData.hours}</p>
+        </div>
+        <div style={styles.skillInfoContainer}>
+          <h3 style={styles.skillTitle}>Supporting Documents</h3>
+          <ul>
+            
+            {files.map((file) => (
+              <li key={file.name}>
+                <a href={file.url} target='_blank' className='text-black hover:text-blue-400'>
+                  {file.name}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>

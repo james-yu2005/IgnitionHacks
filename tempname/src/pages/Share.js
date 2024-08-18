@@ -100,7 +100,7 @@ const Share = ({ userId }) => {
     }
     
     const file = selectedFiles;
-    const fileName = `${file.name}_${new Date().toISOString()}`; 
+    const fileName = `${file.name}`; 
     const folderPath = `user_id-${userId}/${fileName}`; 
 
     const { data, error } = await supabase
