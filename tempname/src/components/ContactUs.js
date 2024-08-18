@@ -80,7 +80,10 @@ const ContactUs = () => {
 
 const styles = {
   container: {
-    backgroundColor: '#447e7b',
+    backgroundColor: '#447e7b', // Fallback color
+    backgroundImage: 'url(/contact.png)', // Set the background image
+    backgroundSize: 'cover', // Cover the entire container
+    backgroundPosition: 'center', // Center the background image
     padding: '2rem',
     color: 'black',
     textAlign: 'center',
@@ -89,6 +92,8 @@ const styles = {
   title: {
     fontSize: '2rem',
     marginBottom: '1rem',
+    fontWeight: 'bold',
+    color: 'white',
   },
   form: {
     display: 'flex',
@@ -116,13 +121,14 @@ const styles = {
   },
   button: {
     padding: '0.75rem 1.5rem',
-    backgroundColor: '#0056b3', // Dark blue color
+    backgroundColor: '#607F7D', // Dark blue color
     color: 'white',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '30px',
     cursor: 'pointer',
     fontSize: '16px',
     marginTop: '1rem',
+    marginBottom: '5rem', // Increased distance from the bottom of the container
   },
   status: {
     marginTop: '1rem',
