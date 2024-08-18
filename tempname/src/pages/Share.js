@@ -4,7 +4,7 @@ import  { insertInfo } from '../supabase/insertInfo';
 import { updateInfo } from '../supabase/updateInfo';
 import { getInfo } from '../supabase/getInfo';
 
-const Share = ({ userId }) => {
+const Share = ({ userId, setUser}) => {
   const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('');
   const [number, setNumber] = useState('');
@@ -68,10 +68,11 @@ const Share = ({ userId }) => {
         age: parsedAge,
         education,
         connection: connect,
-        hours,  // Level of dedication as hours
+        hours, 
         skills: skill,
       };
 
+      setUser(payload)
       if (available) {
         await updateInfo(payload, userId);
         setIsEditing(false);

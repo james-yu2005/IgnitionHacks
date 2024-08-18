@@ -16,6 +16,7 @@ import ContactUs from './components/ContactUs';
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState(''); // Store the authenticated user ID
+  const [user, setUser] = useState([]);
 
   const handleLogin = (id) => {
     setIsAuthenticated(true);
@@ -45,15 +46,15 @@ const App = () => {
             />
             <Route
               path="/share"
-              element={isAuthenticated ? <Share userId={userId}/> : <Navigate to="/signin" />}
+              element={isAuthenticated ? <Share userId={userId} setUser={setUser}/> : <Navigate to="/signin" />}
             />
             <Route 
               path="/connect"
-              element={isAuthenticated ? <Connect userId={userId}/> : <Navigate to="/signin" />}
+              element={isAuthenticated ? <Connect my_user_id={userId}/> : <Navigate to="/signin" />}
             />
             <Route 
               path="/profile/:userId"
-              element={<Profile />}
+              element={<Profile my_id={userId}/>}
             />
           </Routes>
         </main>

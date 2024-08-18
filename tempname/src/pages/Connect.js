@@ -1,21 +1,25 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { supabase } from "../supabase/supabase";
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const Connect = ({ userId }) => {
+const Connect = ({ my_user_id }) => {
   const [conversation, setConversation] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [profileUserId, setProfileUserId] = useState('');
   const [history, setHistory] = useState([]);
-  const api_link = process.env.REACT_APP_API_URL;
+  const api_link = process.env.REACT_APP_URL;
   const context = useRef(''); 
+
+  const navigate = useNavigate();
+
   const generateFirstMessage = async () => {
     try {
       const { data, error } = await supabase
         .from('info')
         .select('skills, user_id, name, lastname, hours, connection')
-        .neq('user_id', userId);
+        .neq('user_id', my_user_id);
 
       if (error) throw error;
 
@@ -27,19 +31,11 @@ const Connect = ({ userId }) => {
         Skill Description: ${entry.skills}`
       ).join('\n');
       
-      const UserData = data.map(entry => 
-        `Full name: ${entry.name + ' ' + entry.lastname}, 
-        User ID: ${entry.user_id},
-        Dedication level: ${entry.hours},
-        Trading Method: ${entry.connection},
-        Skill Description: ${entry.skills}`
-      ).join('\n');
 
       const start_context = `You are a helpful but respectfully assertive AI assistant for a platform called Talent Trade named Talent ED. Talent Trade is a website where users can upload a portfolio demonstrating a skill they have in order to be connected to other people so that they can "swap" skills both teaching each other and "trading talents" hence the name.
-When you find a possible match in the database with a skill similar to what the user is looking for, present the prospective match by describing why they are a good fit. Keep the description under 150 words. After the description, ask the user if they want to connect with the prospective match. If they agree, provide the user with the match's user_ID. The user can then use this ID to view the match's portfolio and send an email requesting a connection.
-If a user asks how they can connect with the person, let them know that they can enter the user_ID in the user_ID field onscreen. Use the history of the conversation, which will be provided to you alongside this context, to ensure accurate matching. The history will be divided into "users:" (what the user said) and "assistant:" (what you previously said). Use this information to match the user with the best fit.
-Here is the database: ${skillsData}
-Here is your users' data: ${UserData}`;
+When you find a possible match in the database with a skill similar to what the user is looking for, present the user_id and why they are a good match. Keep the description under 150 words. Provide the user with the match's user_ID. The user can then use this ID to view the match's portfolio and send an email requesting a connection.
+If a user asks how they can connect with the person, let them know that they can enter the user_ID in the user_ID field onscreen. Use the history of the conversation, which will be provided to you alongside this context, to ensure accurate matching. The history will be divided into "users:" (what the user said) and "assistant:" (what you previously said).
+Here is the database: ${skillsData}`
 
       context.current = start_context;
 
@@ -113,7 +109,8 @@ Here is your users' data: ${UserData}`;
 
   const handleViewProfile = () => {
     if (profileUserId) {
-      window.open(`/profile/${profileUserId}`, '_blank');
+      navigate(`/profile/${profileUserId}`, { state: my_user_id });
+      console.log(my_user_id)
     }
   };
 
