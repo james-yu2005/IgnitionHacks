@@ -28,36 +28,38 @@ const App = () => {
   };
 
   return (
-    <Router>
-      <NavBar isAuthenticated={isAuthenticated} userId={userId} handleLogout={handleLogout} />
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/signin" element={<SignIn onLogin={handleLogin} setUserId={setUserId} />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route 
-            path="/landing" 
-            element={isAuthenticated ? <Landing /> : <Navigate to="/signin"/>} 
-          />
-          <Route
-            path="/share"
-            element={isAuthenticated ? <Share userId={userId}/> : <Navigate to="/signin" />}
-          />
-          <Route 
-            path="/connect"
-            element={isAuthenticated ? <Connect userId={userId}/> : <Navigate to="/signin" />}
-          />
-          <Route 
-            path="/profile/:userId"
-            element={<Profile />}
-          />
-        </Routes>
-      </main>
-      <ContactUs /> {/* This will render the Contact Us form at the bottom of every page */}
-    </Router>
+    <React.StrictMode> {/* Wrap everything in StrictMode */}
+      <Router>
+        <NavBar isAuthenticated={isAuthenticated} userId={userId} handleLogout={handleLogout} />
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/signin" element={<SignIn onLogin={handleLogin} setUserId={setUserId} />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route 
+              path="/landing" 
+              element={isAuthenticated ? <Landing /> : <Navigate to="/signin"/>} 
+            />
+            <Route
+              path="/share"
+              element={isAuthenticated ? <Share userId={userId}/> : <Navigate to="/signin" />}
+            />
+            <Route 
+              path="/connect"
+              element={isAuthenticated ? <Connect userId={userId}/> : <Navigate to="/signin" />}
+            />
+            <Route 
+              path="/profile/:userId"
+              element={<Profile />}
+            />
+          </Routes>
+        </main>
+        <ContactUs /> {/* This will render the Contact Us form at the bottom of every page */}
+      </Router>
+    </React.StrictMode>
   );
 };
 
