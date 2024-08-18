@@ -11,6 +11,8 @@ const Connect = ({ userId }) => {
   const retrieveAllSkillsButUsers = async (message) => {
     setIsLoading(true);
 
+    
+    
     try {
       const { data, error } = await supabase
         .from('info')
@@ -20,6 +22,8 @@ const Connect = ({ userId }) => {
       if (error) throw error;
 
       const skillsData = data.map(entry => `${entry.user_id}: ${entry.skills}`).join('\n');
+      const context = `You are a helpful assistant. The user will provide data containing user_id and skills pairs. Your task is to find the best match for the user's desired skill and explain why that match is appropriate.`
+      const input = `This is the data: ${skillsData}. ${message}`
 
       const openai = new OpenAI({
         apiKey: process.env.REACT_APP_OPEN_AI_API_KEY,
@@ -31,11 +35,11 @@ const Connect = ({ userId }) => {
         messages: [
           {
             role: "system",
-            content: "You are a helpful assistant. The user will provide data containing user_id and skills pairs. Your task is to find the best match for the user's desired skill and explain why that match is appropriate.",
+            content: context,
           },
           {
             role: "user",
-            content: `This is the data: ${skillsData}. ${message}`,
+            content: input,
           },
         ],
         max_tokens: 500, 
