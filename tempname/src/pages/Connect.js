@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from "../supabase/supabase";
-import OpenAI from "openai";
+import axios from 'axios'
 
 const Connect = ({ userId }) => {
 
@@ -10,8 +10,6 @@ const Connect = ({ userId }) => {
 
   const retrieveAllSkillsButUsers = async (message) => {
     setIsLoading(true);
-
-    
     
     try {
       const { data, error } = await supabase
@@ -22,38 +20,33 @@ const Connect = ({ userId }) => {
       if (error) throw error;
 
       const skillsData = data.map(entry => `${entry.user_id}: ${entry.skills}`).join('\n');
-      const context = `You are a helpful assistant. The user will provide data containing user_id and skills pairs. Your task is to find the best match for the user's desired skill and explain why that match is appropriate.`
-      const input = `This is the data: ${skillsData}. ${message}`
 
-      const openai = new OpenAI({
-        apiKey: process.env.REACT_APP_OPEN_AI_API_KEY,
-        dangerouslyAllowBrowser: true,
+      // This is what is given to the AI
+      const context_for_ai = `You are a helpful assistant. The user will provide data containing user_id and skills pairs. Your task is to find the best match for the user's desired skill and explain why that match is appropriate. This is the data: ${skillsData}`
+
+      // This is what the user sends to the AI
+      const message_from_user = `My question about the data for myself is: ${message}`
+
+      const api_link = process.env.REACT_APP_API_URL
+      
+      const res = await axios.post(api_link, {
+        message_from_user,
+        context_for_ai,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
-      const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "system",
-            content: context,
-          },
-          {
-            role: "user",
-            content: input,
-          },
-        ],
-        max_tokens: 500, 
-      });
-
-      const aiMessage = completion.choices[0].message.content;
-
+      const aiMessage = await res.data.response;
+      console.log(aiMessage)
       setConversation((prev) => [
         ...prev,
         { role: "user", content: message },
         { role: "assistant", content: aiMessage },
       ]);
 
-      setInputMessage(''); // Clear the input field after sending the message
+      setInputMessage('');
     } catch (error) {
       console.error("Error:", error);
     } finally {
