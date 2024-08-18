@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const NavBar = ({ isAuthenticated, handleLogout }) => {
+const NavBar = ({ isAuthenticated, userId, handleLogout }) => {
   return (
     <nav style={styles.nav}>
       <div style={styles.leftSection}>
@@ -15,7 +15,7 @@ const NavBar = ({ isAuthenticated, handleLogout }) => {
         {isAuthenticated ? (
           <>
             <Link to="/landing" style={styles.link}>Landing</Link>
-            <Link to="/settings" style={styles.link}>Profile</Link>
+            <Link to={`/profile/${userId}`}>Profile</Link>
             <button onClick={handleLogout} style={styles.link}>Logout</button>
           </>
         ) : (

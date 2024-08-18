@@ -10,23 +10,26 @@ import SignUp from './pages/SignUp';
 import Share from './pages/Share';
 import Connect from './pages/Connect';
 import Landing from './pages/Landing'; // Import the new Landing component
-import Settings from './pages/Settings';
+import Profile from './pages/Profile';
 import ContactUs from './components/ContactUs';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState(''); // Store the authenticated user ID
 
-  const handleLogin = () => {
+  const handleLogin = (id) => {
     setIsAuthenticated(true);
-  }
+    setUserId(id); // Set the userId after login
+  };
+
   const handleLogout = () => {
     setIsAuthenticated(false);
+    setUserId(''); // Clear the userId on logout
   };
 
   return (
     <Router>
-      <NavBar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
+      <NavBar isAuthenticated={isAuthenticated} userId={userId} handleLogout={handleLogout} />
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -45,11 +48,11 @@ const App = () => {
           />
           <Route 
             path="/connect"
-            element={isAuthenticated ? <Connect userId={userId}/>: <Navigate to="/signin" />}
+            element={isAuthenticated ? <Connect userId={userId}/> : <Navigate to="/signin" />}
           />
-          <Route
-            path="/settings"
-            element={isAuthenticated ? <Settings /> : <Navigate to="/signin" />}
+          <Route 
+            path="/profile/:userId"
+            element={<Profile />}
           />
         </Routes>
       </main>
