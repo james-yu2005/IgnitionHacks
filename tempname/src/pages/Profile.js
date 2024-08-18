@@ -75,6 +75,7 @@ const Profile = () => {
           <p><strong>Summary:</strong> {userData.skills}</p>
           <p><strong>Connection type:</strong> {userData.connection}</p>
           <p><strong>Commitment - hrs/wk:</strong> {userData.hours}</p>
+          <p><strong>Uploaded files:</strong> {userData.hours}</p>
         </div>
         <div style={styles.skillInfoContainer}>
           <h3 style={styles.skillTitle}>Supporting Documents</h3>
@@ -124,7 +125,7 @@ const styles = {
     padding: '1rem',
     paddingLeft: '2rem',
     borderRadius: '8px',
-    display: 'flex',
+    display: 'absolute',
     flexDirection: 'column',
     justifyContent: 'space-between',
     minHeight: '200px', // Set a minimum height for consistency
@@ -137,7 +138,7 @@ const styles = {
     padding: '1rem',
     paddingLeft: '2rem',
     borderRadius: '8px',
-    display: 'flex',
+    display: 'absolute',
     flexDirection: 'column',
     justifyContent: 'space-between',
     minHeight: '200px', // Set a minimum height for consistency
