@@ -81,15 +81,13 @@ function SignUp() {
     try {
       const currentTimestamp = new Date().toISOString();
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('users')
         .insert([{ email, password, currentTimestamp }]);
 
       if (error) throw error;
 
-      const userId = data[0].id; // Get the user.id from the inserted data
-
-      navigate('/profile', { state: { user_id } });
+      navigate('/signin');
       
     } catch (error) {
       console.log(error);

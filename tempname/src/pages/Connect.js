@@ -1,11 +1,27 @@
 import React from 'react';
+import { supabase } from "../supabase/supabase"
+import { useLocation } from 'react-router-dom';
 
 const Connect = () => {
+  const location = useLocation();
+  const user_id = (location.state?.user_id);
+  console.log(user_id)
+  const retrieveAllSkillsButUsers = async () => {
+    const { data, error } = await supabase
+      .from('info')
+      .select('skills, user_id')
+      .neq('user_id', user_id);
+
+    if (error) {
+      console.log(error)
+    }
+    console.log(data)
+  }
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>Connect with Others</h2>
       <p>This section will help you connect with others based on your profile.</p>
-      {/* Add more details as needed */}
+      <button className='bg-blue-700' onClick={retrieveAllSkillsButUsers}>get</button>
     </div>
   );
 };

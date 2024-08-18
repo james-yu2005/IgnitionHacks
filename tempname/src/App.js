@@ -9,22 +9,17 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Share from './pages/Share';
 import Connect from './pages/Connect';
-import Profile from './pages/Profile';
 import Landing from './pages/Landing'; // Import the new Landing component
 import Settings from './pages/Settings';
 import ContactUs from './components/ContactUs';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [hasShared, setHasShared] = useState(false); // Track if the user has shared their profile
 
   const handleLogin = () => setIsAuthenticated(true);
   const handleLogout = () => {
     setIsAuthenticated(false);
-    setHasShared(false); // Reset when logging out
   };
-
-  const handleProfileShared = () => setHasShared(true); // Update when profile is shared
 
   return (
     <Router>
@@ -43,15 +38,11 @@ const App = () => {
           />
           <Route
             path="/share"
-            element={isAuthenticated ? <Share onProfileShared={handleProfileShared} /> : <Navigate to="/signin" />}
+            element={isAuthenticated ? <Share /> : <Navigate to="/signin" />}
           />
           <Route 
             path="/connect"
-            element={hasShared ? <Connect /> : <Navigate to="/landing" />}
-          />
-          <Route 
-            path="/profile"
-            element={isAuthenticated ? <Profile /> : <Navigate to="/signin" />}
+            element={<Connect />}
           />
           <Route
             path="/settings"

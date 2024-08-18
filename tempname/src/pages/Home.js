@@ -33,17 +33,6 @@ const styles = {
     margin: '0', // Remove margin
     width: '100%', // Ensure full-width container
   },
-  heroSection: {
-    textAlign: 'center',
-    padding: '100px 20px',
-    backgroundImage: `url('/silhouettes.png')`,
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center center',
-    backgroundSize: 'cover',
-    minHeight: '100vh',
-    color: 'white',
-    margin: '0', // Remove margin
-  },
   title: {
     fontSize: '4rem',
     marginBottom: '20px',
