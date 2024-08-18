@@ -60,7 +60,7 @@ const styles = {
     position: 'relative', // Make sure the parent container is positioned relatively
     textAlign: 'center',
     padding: '100px 20px',
-    backgroundImage: `url('/silhouettes.png')`,
+    backgroundImage: `url('/images/silhouettes.png')`,
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center center',
     backgroundSize: 'cover',
