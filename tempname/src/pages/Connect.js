@@ -3,85 +3,32 @@ import { supabase } from "../supabase/supabase";
 import axios from 'axios';
 
 const Connect = ({ userId }) => {
+
+  const [conversation, setConversation] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [conversation, setConversation] = useState([]);
-  const [history, setHistory] = useState([]);
-  const api_link = process.env.REACT_APP_API_URL;
-  const context = useRef(''); 
 
-  useEffect(() => {
-    const generateFirstMessage = async () => {
-      try {
-        const { data, error } = await supabase
-            .from('info')
-            .select('skills, user_id, name, lastname, hours, connection')
-            .neq('user_id', userId);
-          
-          if (error) throw error;
-  
-          const skillsData = data.map(entry => 
-            `Full name: ${entry.name + ' ' + entry.lastname}, 
-            User ID: ${entry.user_id},
-            Dedication level: ${entry.hours},
-            Trading Method: ${entry.connection},
-            Skill Description: ${entry.skills}`
-          ).join('\n');
-          console.log(skillsData)
-          const UserData = data.map(entry => 
-          `Full name: ${entry.name + ' ' + entry.lastname}, 
-            User ID: ${entry.user_id},
-            Dedication level: ${entry.hours},
-            Trading Method: ${entry.connection},
-            Skill Description: ${entry.skills}`
-          ).join('\n');
-          console.log(UserData)
-        const start_context = `You are a helpful but respectfully assertive AI assistant for a platform called Talent Trade named Talent ED. Talent Trade is a website where users can upload a portfolio demonstrating a skill they have in order to be connected to other people so that they can "swap" skills both teaching each other and "trading talents" hence the name.
-
-When you find a possible match in the database with a skill similar to what the user is looking for, present the prospective match by describing why they are a good fit. Keep the description under 150 words. After the description, ask the user if they want to connect with the prospective match. If they agree, provide the user with the match's user_ID. The user can then use this ID to view the match's portfolio and send an email requesting a connection.
-
-If a user asks how they can connect with the person, let them know that they can enter the user_ID in the user_ID field onscreen. Use the history of the conversation, which will be provided to you alongside this context, to ensure accurate matching. The history will be divided into "users:" (what the user said) and "assistant:" (what you previously said). Use this information to match the user with the best fit.
-
-Here is the database: ${skillsData}
-
-Here is your users' data: ${UserData}`
-  
-        context.current = start_context; // Use the .current property to store context
-        
-        const res = await axios.post(api_link, {
-          message_from_user: "Let's start a conversation! Can you introduce yourself?",
-          context_for_ai: start_context,
-        }, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-  
-        const returnMessage = await res.data.response;
-  
-        setHistory((prev) => [
-          ...prev,
-          { "user": "Let's start a conversation! Can you introduce yourself?", "assistant": returnMessage}
-        ])
-  
-        setConversation((prev) => [
-          ...prev,
-          { role: "assistant", content: returnMessage },
-        ]);
-  
-      } catch (error) {
-        console.log(error)
-      }
-    };
-    generateFirstMessage();
-  }, [userId])
-  
-  const retrieveAllSkillsButUsers = async (message_from_user) => {
+  const retrieveAllSkillsButUsers = async (message) => {
     setIsLoading(true);
-
-    console.log(context)
+    
     try {
-      console.log(history)
+      const { data, error } = await supabase
+        .from('info')
+        .select('skills, user_id')
+        .neq('user_id', userId);
+
+      if (error) throw error;
+
+      const skillsData = data.map(entry => `${entry.user_id}: ${entry.skills}`).join('\n');
+
+      // This is what is given to the AI
+      const context_for_ai = `You are a helpful assistant. The user will provide data containing user_id and skills pairs. Your task is to find the best match for the user's desired skill and explain why that match is appropriate. This is the data: ${skillsData}`
+
+      // This is what the user sends to the AI
+      const message_from_user = `My question about the data for myself is: ${message}`
+
+      const api_link = process.env.REACT_APP_API_URL
+      
       const res = await axios.post(api_link, {
         message_from_user,
         context_for_ai: `Answer the question using this context: ${context.current} and this history: ${history} where it shows what the user said and Talent Ed's response` ,
@@ -93,11 +40,7 @@ Here is your users' data: ${UserData}`
 
       console.log(res)
       const aiMessage = await res.data.response;
-
-      setHistory((prev) => [
-        ...prev,
-        { "user": message_from_user, "assistant": aiMessage}
-      ])
+      console.log(aiMessage)
       setConversation((prev) => [
         ...prev,
         { role: "user", content: message_from_user },
@@ -113,44 +56,64 @@ Here is your users' data: ${UserData}`
   };
 
   const handleSendMessage = async () => {
-    if (!inputMessage.trim()) {
-      alert('Cannot leave fields empty!');
-      return; 
-    }
+    if (!inputMessage.trim()) return; // Do not send empty messages
 
     await retrieveAllSkillsButUsers(inputMessage);
+  };
+
+  const handleViewProfile = () => {
+    if (profileUserId) {
+      window.open(`/profile/${profileUserId}`, '_blank');
+    }
   };
 
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>CONNECT</h2>
-      <div style={styles.chatBox}>
-        {conversation.map((msg, index) => (
-          <div key={index} style={msg.role === 'user' ? styles.userMessage : styles.aiMessage}>
-            <p>{msg.content}</p>
+      <div style={styles.content}>
+        <div style={styles.chatSection}>
+          <div style={styles.chatBox}>
+            {conversation.map((msg, index) => (
+              <div key={index} style={msg.role === 'user' ? styles.userMessage : styles.aiMessage}>
+                <p>{msg.content}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div style={styles.inputContainer}>
-        <input
-          type="text"
-          value={inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
-          style={styles.input}
-          placeholder="Type your message..."
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleSendMessage();
-            }
-          }}
-        />
-        <button
-          onClick={handleSendMessage}
-          style={styles.button}
-          disabled={isLoading}
-        >
-          {isLoading ? 'Sending...' : 'Send'}
-        </button>
+          <div style={styles.inputContainer}>
+            <input
+              type="text"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              style={styles.input}
+              placeholder="Type your message..."
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSendMessage();
+                }
+              }}
+            />
+            <button
+              onClick={handleSendMessage}
+              style={styles.button}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Sending...' : 'Send'}
+            </button>
+          </div>
+        </div>
+        <div style={styles.profileSection}>
+          <h3 style={styles.profileTitle}>View Profile</h3>
+          <input
+            type="text"
+            value={profileUserId}
+            onChange={(e) => setProfileUserId(e.target.value)}
+            style={styles.input}
+            placeholder="Enter User ID..."
+          />
+          <button onClick={handleViewProfile} style={styles.button}>
+            View Profile
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -163,7 +126,7 @@ const styles = {
     backgroundColor: '#f0f0f0',
     borderRadius: '10px',
     boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
-    maxWidth: '800px',
+    maxWidth: '1000px',
     margin: '0 auto',
   },
   title: {
@@ -173,6 +136,14 @@ const styles = {
     color: '#31595B',
     fontWeight: 'bold',
   },
+  content: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  chatSection: {
+    flex: 2,
+    marginRight: '2rem',
+  },
   chatBox: {
     marginBottom: '1.5rem',
     padding: '1rem',
@@ -181,7 +152,7 @@ const styles = {
     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
     maxHeight: '300px',
     overflowY: 'auto',
-    color: '#000', // Set the text color to black
+    color: '#000',
   },
   userMessage: {
     textAlign: 'right',
@@ -189,7 +160,7 @@ const styles = {
     padding: '10px',
     borderRadius: '10px',
     margin: '10px 0',
-    color: '#000', // Set the text color to black
+    color: '#000',
   },
   aiMessage: {
     textAlign: 'left',
@@ -197,7 +168,7 @@ const styles = {
     padding: '10px',
     borderRadius: '10px',
     margin: '10px 0',
-    color: '#000', // Set the text color to black
+    color: '#000',
   },
   inputContainer: {
     display: 'flex',
@@ -212,7 +183,7 @@ const styles = {
     border: '1px solid #ccc',
     boxSizing: 'border-box',
     marginRight: '10px',
-    color: '#000', // Set the text color to black
+    color: '#000',
   },
   button: {
     padding: '0.75rem 1.5rem',
@@ -223,6 +194,15 @@ const styles = {
     borderRadius: '30px',
     cursor: 'pointer',
     transition: 'background-color 0.3s ease',
+  },
+  profileSection: {
+    flex: 1,
+    textAlign: 'center',
+  },
+  profileTitle: {
+    marginBottom: '1rem',
+    fontSize: '1.5rem',
+    color: '#31595B',
   },
 };
 
