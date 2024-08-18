@@ -52,12 +52,14 @@ const styles = {
     backgroundColor: '#f0f0f0',
     borderRadius: '10px',
     boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
-    maxWidth: '900px',
-    margin: '0 auto',
-  },
+    width: '30%', // Takes 30% of the whole page width
+    marginLeft: '0', // Aligns the container to the left
+    marginRight: 'auto', // Ensures the container stays on the left
+  },  
   profileTitle: {
     fontSize: '2rem',
-    color: '#0056b3',
+    color: '#253534',
+    fontWeight: 'bold',
   },
   profileSection: {
     display: 'flex',
@@ -69,6 +71,7 @@ const styles = {
     flex: '2',
     textAlign: 'left',
     marginLeft: '2rem',
+    color: '#253534', 
   },
 };
 
