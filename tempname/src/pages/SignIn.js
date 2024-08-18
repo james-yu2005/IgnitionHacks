@@ -48,7 +48,8 @@ const SignIn = ({ onLogin }) => {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Sign In</h2>
+      <h2 style={styles.titleTop}>TalentTrade</h2>
+      <h2 style={styles.titleBelow}>Log In</h2>
       <form onSubmit={handleSubmit} style={styles.form}>
         <input 
           type="text" 
@@ -74,20 +75,29 @@ const SignIn = ({ onLogin }) => {
 
 const styles = {
   container: {
-    marginTop: '5rem', // Space below the navbar
+    marginTop: '8rem', // Space below the navbar
     maxWidth: '400px',
     margin: '0 auto',
     padding: '2rem',
     textAlign: 'center',
     border: '1px solid #ccc',
-    borderRadius: '10px',
+    borderRadius: '30px',
     backgroundColor: '#f9f9f9',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    marginBottom: '4rem',
+    minHeight: '450px', // Set a minimum height for the box
   },
-  title: {
+  titleTop: {
     fontSize: '2rem',
     marginBottom: '1.5rem',
-    color: '#0056b3', // Dark blue color
+    color: '#78B7B3', 
+    fontWeight: 'bold',
+  },
+  titleBelow: {
+    fontSize: '1rem',
+    marginBottom: '1.5rem',
+    color: '#607F7D', 
+    fontWeight: 'bold',
   },
   form: {
     display: 'flex',
@@ -105,10 +115,10 @@ const styles = {
   },
   button: {
     padding: '0.75rem 1.5rem',
-    backgroundColor: '#0056b3', // Dark blue color
+    backgroundColor: '#607F7D', 
     color: 'white',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '30px',
     cursor: 'pointer',
     fontSize: '16px',
     marginTop: '1rem',
