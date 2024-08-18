@@ -88,13 +88,13 @@ const styles = {
     minHeight: '450px', // Set a minimum height for the box
   },
   titleTop: {
-    fontSize: '2rem',
+    fontSize: '2.25rem',
     marginBottom: '1.5rem',
     color: '#78B7B3', 
     fontWeight: 'bold',
   },
   titleBelow: {
-    fontSize: '1rem',
+    fontSize: '1.5rem',
     marginBottom: '1.5rem',
     color: '#607F7D', 
     fontWeight: 'bold',

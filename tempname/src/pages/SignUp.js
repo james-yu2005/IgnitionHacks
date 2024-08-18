@@ -96,7 +96,8 @@ function SignUp() {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Sign Up</h2>
+      <h2 style={styles.title1}>TalentTrade</h2>
+      <h2 style={styles.title2}>Sign Up</h2>
 
       {!isVerified ? (
         <>
@@ -170,20 +171,29 @@ function SignUp() {
 
 const styles = {
   container: {
-    marginTop: '5rem', // Space below the navbar
+    marginTop: '8rem', // Space below the navbar
     maxWidth: '400px',
     margin: '0 auto',
     padding: '2rem',
     textAlign: 'center',
     border: '1px solid #ccc',
-    borderRadius: '10px',
+    borderRadius: '30px',
     backgroundColor: '#f9f9f9',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    marginBottom: '4rem',
+    minHeight: '450px', // Set a minimum height for the box
   },
-  title: {
-    fontSize: '2rem',
+  title1: {
+    fontSize: '2.25rem',
     marginBottom: '1.5rem',
-    color: '#0056b3', // Dark blue color
+    color: '#78B7B3', 
+    fontWeight: 'bold',
+  },
+  title2: {
+    fontSize: '1.5rem',
+    marginBottom: '1.5rem',
+    color: '#607F7D', 
+    fontWeight: 'bold',
   },
   form: {
     display: 'flex',
@@ -203,13 +213,13 @@ const styles = {
   },
   button: {
     padding: '0.75rem 1.5rem',
-    backgroundColor: '#0056b3', // Dark blue color
+    backgroundColor: '#607F7D', 
     color: 'white',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '30px',
     cursor: 'pointer',
     fontSize: '16px',
-    marginTop: '1rem',
+    marginTop: '2rem',
     transition: 'background-color 0.3s ease',
   },
   status: {
