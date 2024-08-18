@@ -14,9 +14,9 @@ const NavBar = ({ isAuthenticated, handleLogout }) => {
         
         {isAuthenticated ? (
           <>
-            <Link to="/profile" style={styles.link}>Profile</Link>
-            <Link to="/settings" style={styles.link}>Settings</Link>
-            <button onClick={handleLogout} style={styles.logoutButton}>Logout</button>
+            <Link to="/landing" style={styles.link}>Landing</Link>
+            <Link to="/settings" style={styles.link}>Profile</Link>
+            <button onClick={handleLogout} style={styles.link}>Logout</button>
           </>
         ) : (
           <>
@@ -86,13 +86,6 @@ const styles = {
     borderRadius: '20px', // Rounded edges
     cursor: 'pointer',
     fontSize: '16px',
-  },
-  logoutButton: {
-    backgroundColor: 'transparent',
-    color: 'white',
-    border: 'none',
-    fontSize: '16px',
-    cursor: 'pointer',
   },
 };
 

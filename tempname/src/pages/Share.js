@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabase/supabase';
-import { useLocation } from 'react-router-dom';
 import  { insertInfo } from '../supabase/insertInfo';
 import { updateInfo } from '../supabase/updateInfo';
 import { getInfo } from '../supabase/getInfo';
 
-const Share = () => {
+const Share = ({ userId }) => {
   const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('');
   const [number, setNumber] = useState('');
@@ -19,9 +18,6 @@ const Share = () => {
   const [skill, setSkill] = useState('');
   const [selectedFiles, setSelectedFiles] = useState(null);
   const [available, setAvailable] = useState(false);
-
-  const location = useLocation();
-  const userId = location.state?.user_id; 
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -126,7 +122,7 @@ const Share = () => {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Profile</h2>
+      <h2 style={styles.title}>Profile - press "Edit"</h2>
       <div style={styles.row}>
         <div style={styles.column}>
           <label style={styles.label}>First name</label>
@@ -207,7 +203,7 @@ const Share = () => {
           </select>
         </div>
         <div style={styles.column}>
-          <label style={styles.label}>How do you want to connect?</label>
+          <label style={styles.label}>How do you connect?</label>
           <select
             value={connect}
             onChange={(e) => setConnect(e.target.value)}

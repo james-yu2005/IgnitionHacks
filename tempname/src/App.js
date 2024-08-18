@@ -15,8 +15,11 @@ import ContactUs from './components/ContactUs';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userId, setUserId] = useState('');
 
-  const handleLogin = () => setIsAuthenticated(true);
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+  }
   const handleLogout = () => {
     setIsAuthenticated(false);
   };
@@ -30,7 +33,7 @@ const App = () => {
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/signin" element={<SignIn onLogin={handleLogin} />} />
+          <Route path="/signin" element={<SignIn onLogin={handleLogin} setUserId={setUserId} />} />
           <Route path="/signup" element={<SignUp />} />
           <Route 
             path="/landing" 
@@ -38,11 +41,11 @@ const App = () => {
           />
           <Route
             path="/share"
-            element={isAuthenticated ? <Share /> : <Navigate to="/signin" />}
+            element={isAuthenticated ? <Share userId={userId}/> : <Navigate to="/signin" />}
           />
           <Route 
             path="/connect"
-            element={<Connect />}
+            element={isAuthenticated ? <Connect userId={userId}/>: <Navigate to="/signin" />}
           />
           <Route
             path="/settings"

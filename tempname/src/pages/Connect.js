@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { supabase } from "../supabase/supabase";
-import { useLocation } from 'react-router-dom';
 import OpenAI from "openai";
 
-const Connect = () => {
-  const location = useLocation();
-  const user_id = location.state?.user_id;
+const Connect = ({ userId }) => {
 
   const [conversation, setConversation] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
@@ -18,7 +15,7 @@ const Connect = () => {
       const { data, error } = await supabase
         .from('info')
         .select('skills, user_id')
-        .neq('user_id', user_id);
+        .neq('user_id', userId);
 
       if (error) throw error;
 
@@ -28,11 +25,6 @@ const Connect = () => {
         apiKey: process.env.REACT_APP_OPEN_AI_API_KEY,
         dangerouslyAllowBrowser: true,
       });
-
-      const messages = [
-        ...conversation.map((msg) => ({ role: msg.role, content: msg.content })),
-        { role: "user", content: message },
-      ];
 
       const completion = await openai.chat.completions.create({
         model: "gpt-4o-mini",

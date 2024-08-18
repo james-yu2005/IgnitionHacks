@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase/supabase';
 
-const SignIn = ({ onLogin }) => {
+const SignIn = ({ onLogin, setUserId }) => {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState('');
@@ -44,7 +44,8 @@ const SignIn = ({ onLogin }) => {
     console.log(user_id)
     if (user_id) {
       onLogin(); 
-      navigate('/landing', { state: { user_id } });
+      setUserId(user_id)
+      navigate('/landing');
     } else {
       alert('User and password do not match');
     }
