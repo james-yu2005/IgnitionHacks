@@ -62,7 +62,7 @@ const Connect = ({ userId }) => {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Connect with Others</h2>
+      <h2 style={styles.title}>CONNECT</h2>
       <div style={styles.chatBox}>
         {conversation.map((msg, index) => (
           <div key={index} style={msg.role === 'user' ? styles.userMessage : styles.aiMessage}>
@@ -109,7 +109,8 @@ const styles = {
     textAlign: 'center',
     marginBottom: '1.5rem',
     fontSize: '2rem',
-    color: '#0056b3',
+    color: '#31595B',
+    fontWeight: 'bold',
   },
   chatBox: {
     marginBottom: '1.5rem',
@@ -155,10 +156,10 @@ const styles = {
   button: {
     padding: '0.75rem 1.5rem',
     fontSize: '1rem',
-    backgroundColor: '#0056b3',
+    backgroundColor: '#2A4A4C',
     color: 'white',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '30px',
     cursor: 'pointer',
     transition: 'background-color 0.3s ease',
   },
