@@ -3,110 +3,112 @@ import { supabase } from "../supabase/supabase";
 import axios from 'axios';
 
 const Connect = ({ userId }) => {
-
   const [conversation, setConversation] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [profileUserId, setProfileUserId] = useState('');
   const [history, setHistory] = useState([]);
-  const [mounted, setMounted] = useState(true);
   const api_link = process.env.REACT_APP_API_URL;
   const context = useRef(''); 
-  useEffect(() => {
-    const generateFirstMessage = async () => {
-      try {
-        const { data, error } = await supabase
-            .from('info')
-            .select('skills, user_id, name, lastname, hours, connection')
-            .neq('user_id', userId);
+  const generateFirstMessage = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('info')
+        .select('skills, user_id, name, lastname, hours, connection')
+        .neq('user_id', userId);
 
-          if (error) throw error;
+      if (error) throw error;
 
-          const skillsData = data.map(entry => 
-            `Full name: ${entry.name + ' ' + entry.lastname}, 
-            User ID: ${entry.user_id},
-            Dedication level: ${entry.hours},
-            Trading Method: ${entry.connection},
-            Skill Description: ${entry.skills}`
-          ).join('\n');
-          console.log(skillsData)
-          const UserData = data.map(entry => 
-          `Full name: ${entry.name + ' ' + entry.lastname}, 
-            User ID: ${entry.user_id},
-            Dedication level: ${entry.hours},
-            Trading Method: ${entry.connection},
-            Skill Description: ${entry.skills}`
-          ).join('\n');
-          console.log(UserData)
-        const start_context = `You are a helpful but respectfully assertive AI assistant for a platform called Talent Trade named Talent ED. Talent Trade is a website where users can upload a portfolio demonstrating a skill they have in order to be connected to other people so that they can "swap" skills both teaching each other and "trading talents" hence the name.
+      const skillsData = data.map(entry => 
+        `Full name: ${entry.name + ' ' + entry.lastname}, 
+        User ID: ${entry.user_id},
+        Dedication level: ${entry.hours},
+        Trading Method: ${entry.connection},
+        Skill Description: ${entry.skills}`
+      ).join('\n');
+      
+      const UserData = data.map(entry => 
+        `Full name: ${entry.name + ' ' + entry.lastname}, 
+        User ID: ${entry.user_id},
+        Dedication level: ${entry.hours},
+        Trading Method: ${entry.connection},
+        Skill Description: ${entry.skills}`
+      ).join('\n');
+
+      const start_context = `You are a helpful but respectfully assertive AI assistant for a platform called Talent Trade named Talent ED. Talent Trade is a website where users can upload a portfolio demonstrating a skill they have in order to be connected to other people so that they can "swap" skills both teaching each other and "trading talents" hence the name.
 When you find a possible match in the database with a skill similar to what the user is looking for, present the prospective match by describing why they are a good fit. Keep the description under 150 words. After the description, ask the user if they want to connect with the prospective match. If they agree, provide the user with the match's user_ID. The user can then use this ID to view the match's portfolio and send an email requesting a connection.
 If a user asks how they can connect with the person, let them know that they can enter the user_ID in the user_ID field onscreen. Use the history of the conversation, which will be provided to you alongside this context, to ensure accurate matching. The history will be divided into "users:" (what the user said) and "assistant:" (what you previously said). Use this information to match the user with the best fit.
 Here is the database: ${skillsData}
-Here is your users' data: ${UserData}`
+Here is your users' data: ${UserData}`;
 
-        context.current = start_context; // Use the .current property to store context
+      context.current = start_context;
 
-        const res = await axios.post(api_link, {
-          message_from_user: "Let's start a conversation! Can you introduce yourself?",
-          context_for_ai: start_context,
-        }, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+      const res = await axios.post(api_link, {
+        message_from_user: "Let's start a conversation! Can you introduce yourself?",
+        context_for_ai: start_context,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-        if (mounted) {
-          const returnMessage = await res.data.response;
+      const returnMessage = await res.data.response;
+
+      setHistory((prev) => [
+        ...prev,
+        { "user": "Let's start a conversation! Can you introduce yourself?", "assistant": returnMessage }
+      ]);
+
+      setConversation(() => [
+        { role: "assistant", content: returnMessage },
+      ]);
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+ useEffect(() => {
+  generateFirstMessage();
+ }, []);
+
   
-          setHistory((prev) => [
-            ...prev,
-            { "user": "Let's start a conversation! Can you introduce yourself?", "assistant": returnMessage }
-          ]);
-  
-          setConversation((prev) => [
-            ...prev,
-            { role: "assistant", content: returnMessage },
-          ]);
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    };
-    generateFirstMessage();
-    return () => {
-      setMounted(false)
-    };
-  }, [userId, mounted, api_link])
 
   const retrieveAllSkillsButUsers = async (message_from_user) => {
     setIsLoading(true);
+    
+   
+      try {
+        const res = await axios.post(api_link, {
+          message_from_user,
+          context_for_ai: `Answer the question using this context: ${context.current} and this history: ${history} where it shows what the user said and Talent Ed's response`,
+        });
 
-    try {
-      const res = await axios.post(api_link, {
-        message_from_user,
-        context_for_ai: `Answer the question using this context: ${context.current} and this history: ${history} where it shows what the user said and Talent Ed's response` ,
-      })
+        const returnMessage = res.data.response;
 
-      const returnMessage = res.data.response
-      setHistory((prev) => [
-        ...prev,
-        { "user": "Let's start a conversation! Can you introduce yourself?", "assistant": returnMessage}
-      ])
+        setHistory((prev) => [
+          ...prev,
+          { "user": message_from_user, "assistant": returnMessage }
+        ]);
 
-      setConversation((prev) => [
-        ...prev,
-        { role: "user", content: message_from_user},
-        { role: "assistant", content: returnMessage },
-      ]);
-    } catch (error) {
-      console.log(error)
-    }
-  }
+        setConversation((prev) => [
+          ...prev,
+          { role: "user", content: message_from_user },
+          { role: "assistant", content: returnMessage },
+        ]);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    
+  };
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
 
     await retrieveAllSkillsButUsers(inputMessage);
+    setInputMessage(''); // Clear the input field after sending a message
   };
 
   const handleViewProfile = () => {
