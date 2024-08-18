@@ -11,7 +11,7 @@ const NavBar = ({ isAuthenticated, handleLogout }) => {
         
       </div>
       <div style={styles.rightSection}>
-        <button style={styles.languageSwitcher}>EN</button>
+        
         {isAuthenticated ? (
           <>
             <Link to="/profile" style={styles.link}>Profile</Link>
