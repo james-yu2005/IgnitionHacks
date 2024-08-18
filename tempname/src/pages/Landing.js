@@ -52,7 +52,7 @@ const styles = {
     color: '#2A4A4C',      // Custom color
     position: 'absolute',  // Use absolute positioning
     top: '380px',           // Position it from the top
-    left: '340px',         // Position it from the left
+    left: '25%',         // Position it from the left
     padding: '1rem',       // Padding around the text
     borderRadius: '10px',  // Optional rounded corners
     maxWidth: '260px',     // Limit the width of the text block
@@ -63,7 +63,7 @@ const styles = {
     color: '#CFF3F0',      // Custom color
     position: 'absolute',  // Use absolute positioning
     top: '350px',           // Position it from the top
-    left: '860px',         // Position it from the left
+    left: '60%',         // Position it from the left
     padding: '1rem',       // Padding around the text
     borderRadius: '10px',  // Optional rounded corners
     maxWidth: '260px',     // Limit the width of the text block
