@@ -68,6 +68,11 @@ function SignUp() {
 
   const verifyPasswords = (e) => {
     e.preventDefault();
+
+    if (!password || !rePassword) {
+      alert('Passwords cannot be empty')
+      return;
+    }
     if (password !== rePassword) {
       setStatus('Passwords do not match.');
       return;
@@ -149,12 +154,13 @@ function SignUp() {
               required
               style={styles.input}
             />
-            <button type="submit" style={styles.button} onClick={addEmailPasswordData}>Set Password</button>
+            <button type="submit" style={styles.button} >Set Password</button>
           </form>
           {passwordVerified && (
             <>
               <button
-                style={{ ...styles.button, backgroundColor: '#28a745' }} // Green button when password is verified
+                style={{ ...styles.button, backgroundColor: '#28a745' }}
+                onClick={addEmailPasswordData}
               >
                 Proceed to Profile
               </button>
@@ -233,3 +239,8 @@ const styles = {
 };
 
 export default SignUp;
+
+//tell them at top to press edit
+
+//dobnt let them fill form unless all are filled
+

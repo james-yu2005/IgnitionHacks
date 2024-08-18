@@ -10,6 +10,10 @@ const SignIn = ({ onLogin }) => {
   
 
   const authenticate = async () => {
+    if (!username || !password) {
+      alert('Please fill in username and password')
+      return;
+    }
     try {
       const { data, error } = await supabase
         .from('users')

@@ -49,6 +49,10 @@ const Share = () => {
   };
 
   const handleConfirmClick = async () => {
+    if (!firstname || !lastname || !city || !education || !hours || !number || !code || !connect || !age || !skill) {
+      alert('Fill in all fields')
+      return;
+    }
     try {
       const parsedAge = age ? parseInt(age, 10) : null;
       const parsedHours = hours ? parseInt(hours, 10) : null;
@@ -240,7 +244,7 @@ const Share = () => {
         </div>
         <div style={styles.column} className='text-black'>
           <label style={styles.label}>Supporting documents of your skill (upload one at a time - max 3)</label>
-          <input className='text-black' type="file" onChange={handleFileChange}/>     
+          <input className='text-black' type="file" onChange={handleFileChange} disabled={!isEditing}/>     
           <button onClick={handleFileUpload} className='border-2 bg-gray-400 border-gray-700 rounded-md'>Upload to profile</button>
           </div>
           
