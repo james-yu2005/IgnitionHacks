@@ -21,7 +21,7 @@ We developed the app using **React.js** for the front end to display pages and u
 - Full-stack development and deployment
 - Fully integrated **AI assistant** with context designed to keep it well-behaved
 - **Quality of Life** features: form autofills, one account per email, and auto-resizing buttons on the website
-- Automated custom emails sent with the push of a button
+- Automated custom emails sent with the click of a button
 
 ## What We Learned
 
